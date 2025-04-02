@@ -37,7 +37,7 @@ function User() {
 
   function DeleteUser(id: number) {
     api
-      .delete(`/api/users/${id}`, {})
+      .delete(`/api/users/${id}`)
       .then((res) => {
         console.log(res.data);
         setUsers((i) => i.filter((item) => item.id !== id));

@@ -1,10 +1,12 @@
+import { DeleteTwoTone } from "@ant-design/icons";
+import { Button } from "antd";
 
-function Catigories() {
+function DeleteCatigories() {
   return (
-    <div className='pl-36'>
-      Catigories
-    </div>
-  )
+    <Button danger>
+      <DeleteTwoTone twoToneColor="#F01344" />
+    </Button>
+  );
 }
 
-export default Catigories
+export default DeleteCatigories;
