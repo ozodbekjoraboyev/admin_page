@@ -2,20 +2,16 @@ import { useEffect, useState } from "react";
 import { message, Switch, Table } from "antd";
 import { BanersType } from "../../Type";
 import Loading from "../../Loading";
-import axios from "axios";
-import useMyStor from "../../useMyStore";
 import AddBanerlar from "./AddBanerlar";
 import DeleteBanerlar from "./DeleteBanerlar";
+import api from "../../api/api";
 
 function Banners() {
   const [banners, setBanners] = useState<BanersType[]>([]);
-  const accessToken = useMyStor((state) => state.accessToken);
 
   const fetchBanners = () => {
-    axios
-      .get("https://nt.softly.uz/api/banners?limit=10&page=1&order=ASC", {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
+   api
+      .get("/api/banners?limit=10&page=1&order=ASC")
       .then((res) => {
         setBanners(res.data.items);
         message.success("Banners Page 😊");
@@ -27,9 +23,8 @@ function Banners() {
   };
 
   useEffect(() => {
-    if (!accessToken) return;
     fetchBanners();
-  }, [accessToken]);
+  }, []);
 
   if (!banners.length) {
     return (
@@ -40,10 +35,8 @@ function Banners() {
   }
 
   function deleteBanner(id: number) {
-    axios
-      .delete(`https://nt.softly.uz/api/banners/${id}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
+    api
+      .delete(`/api/banners/${id}`, {})
       .then(() => {
         setBanners((prev) => prev.filter((item) => item.id !== id));
         message.success("O'chirish amalga oshirildi 😊");
@@ -54,12 +47,8 @@ function Banners() {
   }
 
   const toggleBanner = (id: number, isActive: boolean) => {
-    axios
-      .patch(
-        `https://nt.softly.uz/api/banners/${id}`,
-        { isActive: !isActive },
-        { headers: { Authorization: `Bearer ${accessToken}` } }
-      )
+    api
+      .patch(`/api/banners/${id}`, { isActive: !isActive })
       .then(() => {
         setBanners((prev) =>
           prev.map((banner) =>

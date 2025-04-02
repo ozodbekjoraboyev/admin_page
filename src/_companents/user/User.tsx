@@ -2,27 +2,19 @@ import { useEffect, useState } from "react";
 import { Button, message, Table } from "antd";
 import { UserType } from "../../Type";
 import Loading from "../../Loading";
-import axios from "axios";
-import useMyStor from "../../useMyStore";
 import AddUser from "./AddUser";
 import DeleteUserId from "./DeleteUserId";
 import { EditOutlined } from "@ant-design/icons";
+import api from "../../api/api";
 
 function User() {
   const [user, setUsers] = useState<UserType[]>([]);
-  const [userEdit, setuserEdit] = useState<Object>();
 
   const [isOpenDraver, setOpenDraver] = useState(false);
 
-  const accessToken = useMyStor((state) => state.accessToken);
-
   const Users = () => {
-    axios
-      .get("https://nt.softly.uz/api/users?limit=10&page=1&order=ASC", {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+    api
+      .get("/api/users?limit=10&page=1&order=ASC")
       .then((res) => {
         setUsers(res.data.items);
       })
@@ -32,9 +24,8 @@ function User() {
       });
   };
   useEffect(() => {
-    if (!accessToken) return;
     Users();
-  }, [accessToken]);
+  }, []);
 
   if (!user.length) {
     return (
@@ -45,12 +36,8 @@ function User() {
   }
 
   function DeleteUser(id: number) {
-    axios
-      .delete(`https://nt.softly.uz/api/users/${id}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      })
+    api
+      .delete(`/api/users/${id}`, {})
       .then((res) => {
         console.log(res.data);
         setUsers((i) => i.filter((item) => item.id !== id));
@@ -60,33 +47,6 @@ function User() {
         message.error("O'chirish amalga oshirilmadi 😒" + e);
       });
   }
-
-function EditedUser(id: number, updatedData: Partial<UserType>) {
-  axios
-    .patch(
-      `https://nt.softly.uz/api/users/${id}`, // ✅ To‘g‘ri endpoint
-      updatedData, // ✅ Tahrirlash uchun malumotlar
-      {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    )
-    .then((res) => {
-      console.log("Tahrir qilingan foydalanuvchi:", res.data);
-
-      // 🟢 Yangilangan foydalanuvchini `user` ro‘yxatiga joylash
-      setUsers((prevUsers) =>
-        prevUsers.map((user) => (user.id === id ? { ...user, ...updatedData } : user))
-      );
-
-      message.success("Tahrirlash amalga oshirildi 😊");
-    })
-    .catch((e) => {
-      console.error("Tahrirlash xatosi:", e);
-      message.error("Tahrirlash amalga oshmadi 😒");
-    });
-}
 
   return (
     <>
@@ -143,16 +103,10 @@ function EditedUser(id: number, updatedData: Partial<UserType>) {
               title: "delete",
               dataIndex: "id",
               key: "id",
-              render: (id: number, edit) => {
+              render: (id: number) => {
                 return (
                   <div className=" flex">
-                    <div
-                      onClick={() => {
-                        setuserEdit(edit);
-                        setOpenDraver(true);
-                        EditedUser(id)
-                      }}
-                    >
+                    <div onClick={() => {}}>
                       <Button>
                         <EditOutlined />
                       </Button>

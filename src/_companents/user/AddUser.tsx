@@ -1,12 +1,10 @@
 import { Button, Drawer, Form, Input, message, Radio } from "antd";
-import axios from "axios";
 import { useState } from "react";
-import useMyStor from "../../useMyStore";
+import api from "../../api/api";
 
 function AddUser({ ozgarish, isOpenDraver, setOpenDraver }: any) {
   const [loading, setloading] = useState(false);
 
-  const state = useMyStor();
 
   return (
     <div className="container m-auto">
@@ -32,9 +30,9 @@ function AddUser({ ozgarish, isOpenDraver, setOpenDraver }: any) {
             console.log("Yangi foydalanuvchi:", values);
             setloading(true);
 
-            axios
+          api
               .post(
-                `https://nt.softly.uz/api/users`,
+                `/api/users`,
                 {
                   name: values.name,
                   email: values.email,
@@ -42,16 +40,14 @@ function AddUser({ ozgarish, isOpenDraver, setOpenDraver }: any) {
                   image: values.image,
                   role: values.role,
                 },
-                {
-                  headers: {
-                    Authorization: `Bearer ${state.accessToken}`,
-                  },
-                }
+            
               )
               .then((res) => {
                 console.log("Serverdan javob:", res.data);
                 setOpenDraver(false);
                 ozgarish?.();
+
+
                 message.success("Qo'shish amalga oshirildi 😊");
               })
               .catch((err) => {

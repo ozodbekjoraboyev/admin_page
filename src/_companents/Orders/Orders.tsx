@@ -1,21 +1,17 @@
 import { message, Table } from "antd";
 import DeletOrders from "./DeleteOrders";
 import AddOrders from "./AddOrders";
-import axios from "axios";
 import { OrdersType } from "../../Type";
-import useMyStor from "../../useMyStore";
 import { useEffect, useState } from "react";
 import Loading from "../../Loading";
+import api from "../../api/api";
 
 function Orders() {
   const [orders, setorders] = useState<OrdersType[]>([]);
-  const accessToken = useMyStor((state) => state.accessToken);
 
   const fetchorders = () => {
-    axios
-      .get("https://nt.softly.uz/api/orders?limit=10&page=1&order=ASC", {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
+    api
+      .get("/api/orders?limit=10&page=1&order=ASC")
       .then((res) => {
         setorders(res.data.items);
         message.success("orders Page 😊");
@@ -27,9 +23,8 @@ function Orders() {
   };
 
   useEffect(() => {
-    if (!accessToken) return;
     fetchorders();
-  }, [accessToken]);
+  }, []);
 
   if (!orders.length) {
     return (
@@ -40,10 +35,8 @@ function Orders() {
   }
 
   function deleteBanner(id: number) {
-    axios
-      .delete(`https://nt.softly.uz/api/orders/${id}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
+    api
+      .delete(`/api/orders/${id}`, {})
       .then(() => {
         setorders((prev) => prev.filter((item) => item.id !== id));
         message.success("O'chirish amalga oshirildi 😊");
@@ -52,7 +45,6 @@ function Orders() {
         message.error("O'chirish amalga oshirilmadi 😒" + e);
       });
   }
-
 
   return (
     <div className="pl-36">
@@ -80,7 +72,7 @@ function Orders() {
             key: "customerId",
           },
           { title: "Created At", dataIndex: "createdAt", key: "createdAt" },
-         
+
           {
             title: "Delete",
             dataIndex: "id",

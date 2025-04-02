@@ -1,24 +1,19 @@
 import { Button, message, Table } from "antd";
 import { useEffect, useState } from "react";
 import { ProductsType } from "../../Type";
-import useMyStor from "../../useMyStore";
-import axios from "axios";
 import Loading from "../../Loading";
 import { EditOutlined } from "@ant-design/icons";
 import DeleteProducts from "./DeleteProducts";
 import AddProducts from "./AddProducts";
+import api from "../../api/api";
 
 function Products() {
   const [products, setProducts] = useState<ProductsType[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<ProductsType>();
   const [isOpenDraver, setOpenDraver] = useState(false);
-  const accessToken = useMyStor((state) => state.accessToken);
 
   const fetchProducts = () => {
-    axios
-      .get("https://nt.softly.uz/api/products?limit=10&page=1&order=ASC", {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
+    api
+      .get("/api/products?limit=10&page=1&order=ASC")
       .then((res) => {
         setProducts(res.data.items);
       })
@@ -29,9 +24,8 @@ function Products() {
   };
 
   useEffect(() => {
-    if (!accessToken) return;
     fetchProducts();
-  }, [accessToken]);
+  }, []);
 
   if (!products.length) {
     return (
@@ -42,10 +36,8 @@ function Products() {
   }
 
   function deleteProduct(id: number) {
-    axios
-      .delete(`https://nt.softly.uz/api/products/${id}`, {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      })
+    api
+      .delete(`/api/products/${id}`)
       .then(() => {
         setProducts((prev) => prev.filter((item) => item.id !== id));
         message.success("O'chirish amalga oshirildi 😊");
@@ -91,11 +83,10 @@ function Products() {
             title: "Actions",
             dataIndex: "id",
             key: "id",
-            render: (id: number, record) => (
+            render: (id: number) => (
               <div className="flex space-x-2">
                 <Button
                   onClick={() => {
-                    setSelectedProduct(record);
                     setOpenDraver(true);
                   }}
                 >

@@ -20,7 +20,7 @@ function LoginPage() {
             api
               .post("/api/auth/login", valus)
               .then((res) => {
-                api.defaults.headers.accessToken = `Bearer ${res.data.accessToken}`;
+                api.defaults.headers.Authorization = `Bearer ${res.data.accessToken}`;
                 useMyStor.setState({
                   accessToken: res.data.accessToken,
                   user: res.data.user,

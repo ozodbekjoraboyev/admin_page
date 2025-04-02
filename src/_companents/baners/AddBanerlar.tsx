@@ -1,13 +1,11 @@
 import { Button, Drawer, Form, Input, message, Radio } from "antd";
-import axios from "axios";
 import { useState } from "react";
-import useMyStor from "../../useMyStore";
+import api from "../../api/api";
 
 function AddBanerlar({ ozgarish }: any) {
   const [loading, setloading] = useState(false);
   const [isOpenModal, setOpenDraver] = useState(false);
 
-  const state = useMyStor();
 
   return (
     <div className="container m-auto">
@@ -33,19 +31,15 @@ function AddBanerlar({ ozgarish }: any) {
             console.log("Yangi foydalanuvchi:", values);
             setloading(true);
 
-            axios
+            api
               .post(
-                `https://nt.softly.uz/api/banners`,
+                `/api/banners`,
                 {
                   title: values.title,
                   isActive: values.isActive,
                   imageUrl: values.imageUrl,
                 },
-                {
-                  headers: {
-                    Authorization: `Bearer ${state.accessToken}`,
-                  },
-                }
+       
               )
               .then((res) => {
                 console.log("Serverdan javob:", res.data);

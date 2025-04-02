@@ -1,13 +1,10 @@
 import { useState } from "react";
-import useMyStor from "../../useMyStore";
 import { Button, Drawer, Form, Input, message } from "antd";
-import axios from "axios";
+import api from "../../api/api";
 
 function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
   const [loading, setloading] = useState(false);
 
-  const state = useMyStor();
-  console.log("Access Token:", state.accessToken);
 
   return (
     <div className="container m-auto">
@@ -33,9 +30,9 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
             console.log("Yangi foydalanuvchi:", values);
             setloading(true);
 
-            axios
+            api
               .post(
-                `https://nt.softly.uz/api/products`,
+                `/api/products`,
                 {
                   name: values.name,
                   stock: Number(values.stock), // String emas, Number jo‘natamiz
@@ -44,11 +41,7 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
                   imageUrl: values.imageUrl,
                   categoryId: Number(values.categoryId),
                 },
-                {
-                  headers: {
-                    Authorization: `Bearer ${state.accessToken}`,
-                  },
-                }
+             
               )
               .then((res) => {
                 console.log("Serverdan javob:", res.data);
