@@ -1,6 +1,13 @@
 import { create } from "zustand";
 import api from "./api/api";
-const useMyStor = create((set) => {
+
+type GlobalState = {
+  accessToken: string;
+  user: any;
+  logout: () => void;
+};
+
+const useMyStor = create<GlobalState>((state) => {
   const ls_strin = localStorage.getItem("auth");
 
   if (!ls_strin) {
@@ -19,7 +26,7 @@ const useMyStor = create((set) => {
     user: ls.user,
     logout: () => {
       localStorage.removeItem("auth");
-      set({
+      state({
         user: null,
         accessToken: "",
       });

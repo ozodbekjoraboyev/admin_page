@@ -47,8 +47,6 @@ function Products() {
       });
   }
 
- 
-
   return (
     <div className="pl-36">
       <div className="flex-1">

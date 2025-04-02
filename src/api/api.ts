@@ -9,8 +9,8 @@ api.interceptors.response.use(null, (e) => {
     import("../useMyStore").then((res) => {
       const useAurStore = res.default;
       const state = useAurStore.getState();
-
-      state.logout();
+      state.logout()
+    
     });
   }
 });
