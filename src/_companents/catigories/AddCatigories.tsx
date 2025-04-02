@@ -1,10 +1,11 @@
 import { Button, Drawer, Form, Input, message } from "antd";
 import api from "../../api/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { CatigoriesType } from "../../Type";
 
 function AddCatigories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
+  const [categories, setCategories] = useState<CatigoriesType[]>([]);
   const [loading, setloading] = useState(false);
-
 
   return (
     <div className="container m-auto">
@@ -30,39 +31,30 @@ function AddCatigories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
             console.log("Yangi foydalanuvchi:", values);
             setloading(true);
 
-          api
-              .post(
-                `/api/categories`,
-                {
-                  name: values.name,
-                  description: values.description,
-               
-                },
-            
-              )
-              .then((res) => {
-                console.log("Serverdan javob:", res.data);
-                setOpenDraver(false);
-                ozgarish?.();
-
-
-                message.success("Qo'shish amalga oshirildi 😊");
-              })
-              .catch((err) => {
-                console.error("Xatolik yuz berdi😒", err.message);
-                message.error("Qo'shish amalga oshirilmadi  😒  " + err);
-              })
-              .finally(() => setloading(false));
+            useEffect(() => {
+              api
+                .get("/api/categories") // Backenddan kategoriyalarni olish
+                .then((res) => {
+                  setCategories(res.data.items); // `items` orqali kategoriyalarni olish
+                })
+                .catch((err) => {
+                  console.error("Kategoriyalarni yuklashda xatolik:", err);
+                  message.error("Kategoriyalarni yuklashda xatolik 😒");
+                });
+            }, []);
           }}
         >
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input placeholder="Foydalanuvchi ismi" />
           </Form.Item>
-          <Form.Item name="description" label="description" rules={[{ required: true }]}>
+          <Form.Item
+            name="description"
+            label="description"
+            rules={[{ required: true }]}
+          >
             <Input placeholder="descriptionni kiriting" />
           </Form.Item>
-         
-   
+
           <Form.Item>
             <div className="flex gap-5 justify-end">
               <Button loading={loading} htmlType="submit" type="primary">
@@ -76,4 +68,4 @@ function AddCatigories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
   );
 }
 
-export default AddCatigories
+export default AddCatigories;

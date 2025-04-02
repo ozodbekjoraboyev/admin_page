@@ -69,6 +69,7 @@ function Products() {
           { title: "Price", dataIndex: "price", key: "price" },
           { title: "Stock", dataIndex: "stock", key: "stock" },
           { title: "Created At", dataIndex: "createdAt", key: "createdAt" },
+          { title: "categoryId", dataIndex: "categoryId" , key:"categoryId"},
           {
             title: "Image",
             dataIndex: "imageUrl",
