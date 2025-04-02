@@ -4,10 +4,12 @@ import LoginPage from "./companents/Login";
 import useMyStor from "./useMyStore";
 
 function App() {
-const stateTokin = useMyStor()
+  // Zustand store'ni hook sifatida ishlatish kerak
+  const { user }:any = useMyStor();
+  
   return (
     <>
-      {stateTokin.user ? <Navbar /> : <LoginPage />}
+      {user ? <Navbar /> : <LoginPage />}
     </>
   );
 }
