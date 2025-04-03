@@ -63,7 +63,7 @@ function LoginPage() {
 
   return (  
     <>  
-      <div className="animation-container fixed top-0 left-0 right-0 bottom-0 overflow-hidden z-0" />  
+      <div className="animation-container  fixed top-0 left-0 right-0 bottom-0 overflow-hidden z-0" />  
 
       <div className="flex items-center justify-center h-screen relative z-50">  
         <Card className="w-[400px] bg-white/80 backdrop-blur-sm shadow-lg rounded-lg p-6">  

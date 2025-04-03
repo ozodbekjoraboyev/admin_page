@@ -29,7 +29,7 @@ function User() {
 
   if (!user.length) {
     return (
-      <div className="m-auto flex justify-center items-center top-0 bottom-0 left-0 right-0">
+      <div className="m-auto  flex justify-center items-center top-0 bottom-0 left-0 right-0">
         <Loading />
       </div>
     );
@@ -59,6 +59,7 @@ function User() {
           />
         </div>
         <Table
+          scroll={{ y: 55 * 5 }}
           dataSource={user.map((item) => ({ ...item, key: item.id }))}
           columns={[
             {

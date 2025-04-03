@@ -7,8 +7,8 @@ import Products from "../_companents/products/Products";
 import Banners from "../_companents/baners/Banerlar";
 function Navbar() {
   return (
-    <div className=" container m-auto">
-      <div className=" flex justify-between bg-gradient-to-r from-black p-2  to-blue-600 text-white">
+    <div className=" container m-auto   ">
+      <div className=" flex justify-between bg-gradient-to-r from-black p-2  to-blue-600 text-white  overflow-hidden">
         <div>Logo</div>
         <div className=" flex items-center ">
           <img

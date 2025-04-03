@@ -11,6 +11,7 @@ function Products() {
   const [products, setProducts] = useState<ProductsType[]>([]);
   const [isOpenDraver, setOpenDraver] = useState(false);
   const [catigories, setCatigories] = useState<CatigoriesType[]>([]);
+  const [editProduct, setEditProduct] = useState<ProductsType | null>(null);
 
   const fetchProducts = () => {
     api
@@ -27,7 +28,7 @@ function Products() {
   useEffect(() => {
     fetchProducts();
   }, []);
-  
+
   useEffect(() => {
     api.get(`/api/categories`).then((res) => {
       console.log(res.data.items);
@@ -55,6 +56,19 @@ function Products() {
       });
   }
 
+  const EditProduct = (id: number) => {
+    api
+      .get(`/api/products/${id}`)
+      .then((res) => {
+        setEditProduct(res.data);
+        console.log(res.data);
+        message.success("ahoyib ");
+      })
+      .catch((e) => {
+        console.log("xatolik produkt faylda" + e);
+        message.error("xatolik produkt faylda" + e);
+      });
+  };
 
   return (
     <div className="pl-36">
@@ -63,6 +77,7 @@ function Products() {
           fetchProducts={fetchProducts}
           isOpenDraver={isOpenDraver}
           setOpenDraver={setOpenDraver}
+          editProduct={editProduct} // ✅ editProduct ni jo‘natish
         />
       </div>
       <Table
@@ -75,9 +90,47 @@ function Products() {
             dataIndex: "description",
             key: "description",
           },
-          { title: "Price", dataIndex: "price", key: "price" },
-          { title: "Stock", dataIndex: "stock", key: "stock" },
-          { title: "Created At", dataIndex: "createdAt", key: "createdAt" },
+          {
+            title: "Price",
+            dataIndex: "price",
+            key: "price",
+            render: (price) => {
+              const formattedPrice = price.toLocaleString("ru");
+              return (
+                <div>
+                  <p>{formattedPrice} som</p>
+                </div>
+              );
+            },
+          },
+
+          {
+            title: "Stock",
+            dataIndex: "stock",
+            key: "stock",
+            render: (stock) => {
+              const formattedstock = stock.toLocaleString("ru");
+              return (
+                <div>
+                  <p>{formattedstock} ta</p>
+                </div>
+              );
+            },
+          },
+          {
+            title: "Created At",
+            dataIndex: "createdAt",
+            key: "createdAt",
+            render: (createdAt) => {
+              const date = new Date(createdAt);
+              const formattedCreatedAt = date.toLocaleString("ru");
+              return (
+                <div>
+                  <p>{formattedCreatedAt}</p>
+                </div>
+              );
+            },
+          },
           {
             title: "categoryId",
             dataIndex: "categoryId",
@@ -106,6 +159,7 @@ function Products() {
                 <Button
                   onClick={() => {
                     setOpenDraver(true);
+                    EditProduct(id);
                   }}
                 >
                   <EditOutlined />

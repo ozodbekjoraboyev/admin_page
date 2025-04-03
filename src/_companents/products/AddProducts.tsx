@@ -3,7 +3,7 @@ import { Button, Drawer, Form, Input, message, Select } from "antd";
 import api from "../../api/api";
 import { CatigoriesType } from "../../Type";
 
-function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
+function AddProducts({ ozgarish, isOpenDraver, setOpenDraver,EditProduct }: any) {
   const [loading, setloading] = useState(false);
   const [categories, setCategories] = useState<CatigoriesType[]>([]);
 
@@ -41,11 +41,12 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
         }}
       >
         <Form
+        initialValues={EditProduct}
           layout="vertical"
           onFinish={(values) => {
             console.log("Yangi mahsulot:", values);
             setloading(true);
-          
+
             api
               .post(`/api/products`, {
                 name: values.name,
@@ -57,7 +58,10 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
               })
               .then(() => {
                 setOpenDraver(false);
-                ozgarish?.(); // Yangi mahsulot qo‘shilganidan keyin `fetchProducts()` chaqiriladi
+
+                ozgarish?.();
+                EditProduct?.()
+
                 message.success("Qo'shish amalga oshirildi 😊");
               })
               .catch((err) => {
@@ -68,8 +72,10 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
                 );
               })
               .finally(() => setloading(false));
+
+
+
           }}
-          
         >
           <Form.Item name="name" label="Name" rules={[{ required: true }]}>
             <Input />

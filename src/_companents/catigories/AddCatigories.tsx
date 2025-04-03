@@ -37,7 +37,8 @@ function AddCategories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
     } catch (err: any) {
       console.error("Xatolik yuz berdi:", err.message);
       message.error(
-        "Kategoriya qo‘shilmadi 😒 " + (err.response?.data?.message || err.message)
+        "Kategoriya qo‘shilmadi 😒 " +
+          (err.response?.data?.message || err.message)
       );
     } finally {
       setLoading(false);
@@ -63,7 +64,11 @@ function AddCategories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
         }}
       >
         <Form layout="vertical" onFinish={handleSubmit}>
-          <Form.Item name="name" label="Kategoriya nomi" rules={[{ required: true }]}>
+          <Form.Item
+            name="name"
+            label="Kategoriya nomi"
+            rules={[{ required: true }]}
+          >
             <Input placeholder="Kategoriya nomini kiriting" />
           </Form.Item>
           <Form.Item
