@@ -3,21 +3,58 @@ import api from "../../api/api";
 import { useEffect, useState } from "react";
 import { CatigoriesType } from "../../Type";
 
-function AddCatigories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
-  const [categories, setCategories] = useState<CatigoriesType[]>([]);
-  const [loading, setloading] = useState(false);
+function AddCategories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
+  const [_, setCategories] = useState<CatigoriesType[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  // Kategoriyalarni yuklash
+  useEffect(() => {
+    api
+      .get("/api/categories")
+      .then((res) => {
+        setCategories(res.data.items);
+      })
+      .catch((err) => {
+        console.error("Kategoriyalarni yuklashda xatolik:", err);
+        message.error("Kategoriyalarni yuklashda xatolik 😒");
+      });
+  }, []);
+
+  // Formni yuborish
+  const handleSubmit = async (values: any) => {
+    console.log("Yangi kategoriya:", values);
+    setLoading(true);
+
+    try {
+      await api.post("/api/categories", {
+        name: values.name,
+        description: values.description,
+      });
+
+      message.success("Kategoriya muvaffaqiyatli qo‘shildi 😊");
+      setOpenDraver(false);
+      ozgarish(); // Kategoriyalar ro‘yxatini yangilash uchun
+    } catch (err: any) {
+      console.error("Xatolik yuz berdi:", err.message);
+      message.error(
+        "Kategoriya qo‘shilmadi 😒 " + (err.response?.data?.message || err.message)
+      );
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="container m-auto">
       <div className="flex items-center justify-between">
-        <h1 className="font-bold text-2xl p-2">Users</h1>
+        <h1 className="font-bold text-2xl p-2">Kategoriyalar</h1>
         <Button type="primary" onClick={() => setOpenDraver(true)}>
-          + Add user
+          + Kategoriya qo‘shish
         </Button>
       </div>
 
       <Drawer
-        title="New User"
+        title="Yangi kategoriya qo‘shish"
         width={500}
         onClose={() => setOpenDraver(false)}
         open={isOpenDraver}
@@ -25,34 +62,16 @@ function AddCatigories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
           body: { paddingBottom: 80 },
         }}
       >
-        <Form
-          layout="vertical"
-          onFinish={(values) => {
-            console.log("Yangi foydalanuvchi:", values);
-            setloading(true);
-
-            useEffect(() => {
-              api
-                .get("/api/categories") // Backenddan kategoriyalarni olish
-                .then((res) => {
-                  setCategories(res.data.items); // `items` orqali kategoriyalarni olish
-                })
-                .catch((err) => {
-                  console.error("Kategoriyalarni yuklashda xatolik:", err);
-                  message.error("Kategoriyalarni yuklashda xatolik 😒");
-                });
-            }, []);
-          }}
-        >
-          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-            <Input placeholder="Foydalanuvchi ismi" />
+        <Form layout="vertical" onFinish={handleSubmit}>
+          <Form.Item name="name" label="Kategoriya nomi" rules={[{ required: true }]}>
+            <Input placeholder="Kategoriya nomini kiriting" />
           </Form.Item>
           <Form.Item
             name="description"
-            label="description"
+            label="Tavsif"
             rules={[{ required: true }]}
           >
-            <Input placeholder="descriptionni kiriting" />
+            <Input placeholder="Kategoriya tavsifini kiriting" />
           </Form.Item>
 
           <Form.Item>
@@ -68,4 +87,4 @@ function AddCatigories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
   );
 }
 
-export default AddCatigories;
+export default AddCategories;

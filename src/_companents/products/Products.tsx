@@ -1,6 +1,6 @@
 import { Button, message, Table } from "antd";
 import { useEffect, useState } from "react";
-import { ProductsType } from "../../Type";
+import { CatigoriesType, ProductsType } from "../../Type";
 import Loading from "../../Loading";
 import { EditOutlined } from "@ant-design/icons";
 import DeleteProducts from "./DeleteProducts";
@@ -10,6 +10,7 @@ import api from "../../api/api";
 function Products() {
   const [products, setProducts] = useState<ProductsType[]>([]);
   const [isOpenDraver, setOpenDraver] = useState(false);
+  const [catigories, setCatigories] = useState<CatigoriesType[]>([]);
 
   const fetchProducts = () => {
     api
@@ -25,6 +26,13 @@ function Products() {
 
   useEffect(() => {
     fetchProducts();
+  }, []);
+  
+  useEffect(() => {
+    api.get(`/api/categories`).then((res) => {
+      console.log(res.data.items);
+      setCatigories(res.data.items);
+    });
   }, []);
 
   if (!products.length) {
@@ -46,6 +54,7 @@ function Products() {
         message.error("O'chirish amalga oshirilmadi 😒" + e);
       });
   }
+
 
   return (
     <div className="pl-36">
@@ -69,7 +78,17 @@ function Products() {
           { title: "Price", dataIndex: "price", key: "price" },
           { title: "Stock", dataIndex: "stock", key: "stock" },
           { title: "Created At", dataIndex: "createdAt", key: "createdAt" },
-          { title: "categoryId", dataIndex: "categoryId" , key:"categoryId"},
+          {
+            title: "categoryId",
+            dataIndex: "categoryId",
+            key: "categoryId",
+            render: (categoryId) => {
+              const carigoriesname = catigories.find(
+                (item) => item.id === categoryId
+              );
+              return carigoriesname?.name;
+            },
+          },
           {
             title: "Image",
             dataIndex: "imageUrl",
