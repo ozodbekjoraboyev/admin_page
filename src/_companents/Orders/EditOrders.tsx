@@ -1,45 +1,36 @@
 import { Button, Drawer, Form, Input, message, Radio } from "antd";
-import { useState } from "react";
 import api from "../../api/api";
+import { OrdersType } from "../../Type";
+import { useState } from "react";
 
-function AddOrders({ ozgarish }: any) {
+function EditOrders({
+  editOrders,
+  seteditOrders,
+}: {
+  editOrders: OrdersType;
+  seteditOrders: any;
+}) {
   const [loading, setloading] = useState(false);
-  const [isOpenModal, setOpenDraver] = useState(false);
-
 
   return (
-    <div className="container m-auto">
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-2xl p-2">Users</h1>
-        <Button type="primary" onClick={() => setOpenDraver(true)}>
-          + Add user
-        </Button>
-      </div>
-
-      <Drawer
-        title="New User"
-        width={500}
-        onClose={() => setOpenDraver(false)}
-        open={isOpenModal}
-        styles={{
-          body: { paddingBottom: 80 },
-        }}
-      >
+    <div>
+      <Drawer>
         <Form
           layout="vertical"
+          initialValues={editOrders}
           onFinish={(values) => {
             console.log("Yangi foydalanuvchi:", values);
             setloading(true);
 
             api
-              .post(`/api/orderss`, {
-                customerId: values.customerId,
-                items: values.items,
+              .patch(`/api/orders`, {
+                title: values.title,
+                isActive: values.isActive,
+                imageUrl: values.imageUrl,
               })
               .then((res) => {
                 console.log("Serverdan javob:", res.data);
-                setOpenDraver(false);
-                ozgarish?.();
+                seteditOrders(false);
                 message.success("Qo'shish amalga oshirildi 😊");
               })
               .catch((err) => {
@@ -88,17 +79,4 @@ function AddOrders({ ozgarish }: any) {
   );
 }
 
-export default AddOrders;
-
-
-
-
-// {
-//   "customerId": 0,
-//   "items": [
-//     {
-//       "productId": 0,
-//       "quantity": 0
-//     }
-//   ]
-// }
+export default EditOrders;

@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
-import { message, Switch, Table } from "antd";
+import { Button, message, Switch, Table } from "antd";
 import { BanersType } from "../../Type";
 import Loading from "../../Loading";
 import AddBanerlar from "./AddBanerlar";
 import DeleteBanerlar from "./DeleteBanerlar";
 import api from "../../api/api";
+import { EditOutlined } from "@ant-design/icons";
+import EditBunner from "./EditBunner";
 
 function Banners() {
   const [banners, setBanners] = useState<BanersType[]>([]);
+  const [editBanners, seteditBanners] = useState<BanersType | null>(null);
 
   const fetchBanners = () => {
-   api
+    api
       .get("/api/banners?limit=10&page=1&order=ASC")
       .then((res) => {
         setBanners(res.data.items);
@@ -98,14 +101,27 @@ function Banners() {
             title: "Delete",
             dataIndex: "id",
             key: "id",
-            render: (id: number) => (
-              <div onClick={() => deleteBanner(id)}>
-                <DeleteBanerlar />
+            render: (id: number, nimadur) => (
+              <div className=" flex items-center">
+                <Button
+                  onClick={() => {
+                    seteditBanners(nimadur);
+                    console.log(nimadur);
+                    
+                  }}
+                >
+                  <EditOutlined />
+                </Button>
+
+                <div onClick={() => deleteBanner(id)}>
+                  <DeleteBanerlar />
+                </div>
               </div>
             ),
           },
         ]}
       />
+      <EditBunner editBanners={editBanners} seteditBanners={seteditBanners} fetchBanners={fetchBanners}/>
     </div>
   );
 }

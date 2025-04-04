@@ -1,45 +1,50 @@
 import { Button, Drawer, Form, Input, message, Radio } from "antd";
 import { useState } from "react";
 import api from "../../api/api";
+import { UserType } from "../../Type";
 
-function AddOrders({ ozgarish }: any) {
+function EditUser({
+  editUser,
+  setEditUser,
+  Users
+}: {
+  editUser?: UserType;
+  setEditUser: any;
+  Users: ()=>void
+}) {
   const [loading, setloading] = useState(false);
-  const [isOpenModal, setOpenDraver] = useState(false);
-
 
   return (
-    <div className="container m-auto">
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-2xl p-2">Users</h1>
-        <Button type="primary" onClick={() => setOpenDraver(true)}>
-          + Add user
-        </Button>
-      </div>
-
+    <>
       <Drawer
-        title="New User"
-        width={500}
-        onClose={() => setOpenDraver(false)}
-        open={isOpenModal}
+        title="Edit"
+        onClose={() => setEditUser(undefined)}
+        open={editUser ? true : false}
         styles={{
           body: { paddingBottom: 80 },
         }}
       >
         <Form
           layout="vertical"
+          initialValues={editUser}
           onFinish={(values) => {
             console.log("Yangi foydalanuvchi:", values);
             setloading(true);
 
             api
-              .post(`/api/orderss`, {
-                customerId: values.customerId,
-                items: values.items,
+              .patch(`/api/users/${editUser?.id}`, {
+                name: values.name,
+                email: values.email,
+                password: values.password,
+                image: values.image,
+                role: values.role,
               })
               .then((res) => {
                 console.log("Serverdan javob:", res.data);
-                setOpenDraver(false);
-                ozgarish?.();
+                setEditUser(undefined);
+                Users()
+
+
                 message.success("Qo'shish amalga oshirildi 😊");
               })
               .catch((err) => {
@@ -49,32 +54,36 @@ function AddOrders({ ozgarish }: any) {
               .finally(() => setloading(false));
           }}
         >
-          <Form.Item name="title" label="title" rules={[{ required: true }]}>
+          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+            <Input placeholder="Foydalanuvchi ismi" />
+          </Form.Item>
+          <Form.Item name="email" label="Email" rules={[{ required: true }]}>
+            <Input placeholder="Emailni kiriting" />
+          </Form.Item>
+          <Form.Item
+            name="password"
+            label="pasvord"
+            rules={[{ required: true }]}
+          >
             <Input placeholder="Foydalanuvchi ismi" />
           </Form.Item>
           <Form.Item
-            name="imageUrl"
-            label="imageUrl"
+            name="image"
+            label="Image URL"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Emailni kiriting" />
+            <Input placeholder="Rasm URL manzilini kiriting" />
           </Form.Item>
-
-          <Form.Item
-            name="isActive"
-            label="isActive"
-            rules={[{ required: true }]}
-          >
+          <Form.Item name="role" label="Role" rules={[{ required: true }]}>
             <Radio.Group
               options={[
-                { label: "Ha", value: true },
-                { label: "Yo‘q", value: false },
+                { label: "Customer", value: "customer" },
+                { label: "Admin", value: "admin" },
               ]}
               optionType="button"
               buttonStyle="solid"
             />
           </Form.Item>
-
           <Form.Item>
             <div className="flex gap-5 justify-end">
               <Button loading={loading} htmlType="submit" type="primary">
@@ -84,21 +93,8 @@ function AddOrders({ ozgarish }: any) {
           </Form.Item>
         </Form>
       </Drawer>
-    </div>
+    </>
   );
 }
 
-export default AddOrders;
-
-
-
-
-// {
-//   "customerId": 0,
-//   "items": [
-//     {
-//       "productId": 0,
-//       "quantity": 0
-//     }
-//   ]
-// }
+export default EditUser;

@@ -6,6 +6,7 @@ import { EditOutlined } from "@ant-design/icons";
 import DeleteProducts from "./DeleteProducts";
 import AddProducts from "./AddProducts";
 import api from "../../api/api";
+import EditProducts from "./EditProducts";
 
 function Products() {
   const [products, setProducts] = useState<ProductsType[]>([]);
@@ -56,28 +57,12 @@ function Products() {
       });
   }
 
-  const EditProduct = (id: number) => {
-    api
-      .get(`/api/products/${id}`)
-      .then((res) => {
-        setEditProduct(res.data);
-        console.log(res.data);
-        message.success("ahoyib ");
-      })
-      .catch((e) => {
-        console.log("xatolik produkt faylda" + e);
-        message.error("xatolik produkt faylda" + e);
-      });
-  };
-
   return (
     <div className="pl-36">
       <div className="flex-1">
         <AddProducts
-          fetchProducts={fetchProducts}
           isOpenDraver={isOpenDraver}
           setOpenDraver={setOpenDraver}
-          editProduct={editProduct} // ✅ editProduct ni jo‘natish
         />
       </div>
       <Table
@@ -154,12 +139,13 @@ function Products() {
             title: "Actions",
             dataIndex: "id",
             key: "id",
-            render: (id: number) => (
+            render: (id: number, nimadur) => (
               <div className="flex space-x-2">
                 <Button
                   onClick={() => {
-                    setOpenDraver(true);
-                    EditProduct(id);
+                    setEditProduct(nimadur);
+
+                    console.log(nimadur);
                   }}
                 >
                   <EditOutlined />
@@ -172,6 +158,7 @@ function Products() {
           },
         ]}
       />
+      <EditProducts editProduct={editProduct} setEditProduct={setEditProduct} />
     </div>
   );
 }

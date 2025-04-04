@@ -1,41 +1,24 @@
-import { useState, useEffect } from "react";
 import { Button, Drawer, Form, Input, message, Select } from "antd";
-import api from "../../api/api";
+import { useEffect, useState } from "react";
 import { CatigoriesType } from "../../Type";
+import api from "../../api/api";
 
-function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
+function EditProducts({ editProduct, setEditProduct }: any) {
   const [loading, setloading] = useState(false);
-  const [categories, setCategories] = useState<CatigoriesType[]>([]);
-
-  const CatigoriId = () => {
-    api
-      .get("/api/categories")
-      .then((res) => {
-        setCategories(res.data.items); // Backenddan kelgan ma'lumotni olish
-      })
-      .catch((err) => {
-        console.error("Kategoriyalarni yuklashda xatolik:", err);
-        message.error("Kategoriyalarni yuklashda xatolik 😒");
-      });
-  };
-
-  useEffect(() => {
-    CatigoriId();
-  }, []);
 
   return (
     <>
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-2xl p-2">Users</h1>
-        <Button type="primary" onClick={() => setOpenDraver(true)}>
+        <Button type="primary" onClick={() => setEditProduct(true)}>
           + Add user
         </Button>
       </div>
       <Drawer
-        title="New Product"
+        title="Edit"
         width={500}
-        onClose={() => setOpenDraver(false)}
-        open={isOpenDraver}
+        onClose={() => setEditProduct(false)}
+        open={editProduct}
         styles={{
           body: { paddingBottom: 80 },
         }}
@@ -56,9 +39,8 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
                 categoryId: Number(values.categoryId),
               })
               .then(() => {
-                setOpenDraver(false);
+                setEditProduct(false);
 
-                ozgarish?.();
 
                 message.success("Qo'shish amalga oshirildi 😊");
               })
@@ -95,7 +77,7 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
           >
             <Input placeholder="Mahsulot rasmi URL manzilini kiriting" />
           </Form.Item>
-          <Form.Item
+          {/* <Form.Item
             name="categoryId"
             label="Category Nomi"
             rules={[
@@ -111,7 +93,7 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
               }))}
               placeholder="Kategoriya tanlang"
             />
-          </Form.Item>
+          </Form.Item> */}
           <Form.Item>
             <div className="flex gap-5 justify-end">
               <Button loading={loading} htmlType="submit" type="primary">
@@ -125,4 +107,4 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
   );
 }
 
-export default AddProducts;
+export default EditProducts;

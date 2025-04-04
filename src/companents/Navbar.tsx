@@ -5,6 +5,7 @@ import Orders from "../_companents/Orders/Orders";
 import Catigories from "../_companents/catigories/Catigories";
 import Products from "../_companents/products/Products";
 import Banners from "../_companents/baners/Banerlar";
+import Dashboard from "../_companents/Dashboard";
 function Navbar() {
   return (
     <div className=" container m-auto   ">
@@ -30,6 +31,7 @@ function Navbar() {
         <Route path="/orders" element={<Orders />} />
         <Route path="/products" element={<Products />} />
         <Route path="/catigories" element={<Catigories />} />
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </div>
   );

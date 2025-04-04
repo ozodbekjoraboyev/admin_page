@@ -24,6 +24,9 @@ function Saitbar() {
           {
             to: "/catigories",
             label: "Catigories",
+          },  {
+            to: "/dashboard",
+            label: "Dashboard",
           },
        
         ].map((item) => {

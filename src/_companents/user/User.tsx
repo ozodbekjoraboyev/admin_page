@@ -6,11 +6,13 @@ import AddUser from "./AddUser";
 import DeleteUserId from "./DeleteUserId";
 import { EditOutlined } from "@ant-design/icons";
 import api from "../../api/api";
+import EditUser from "./EditUser";
 
 function User() {
   const [user, setUsers] = useState<UserType[]>([]);
 
   const [isOpenDraver, setOpenDraver] = useState(false);
+  const [editUser, setEditUser] = useState<UserType>();
 
   const Users = () => {
     api
@@ -59,7 +61,6 @@ function User() {
           />
         </div>
         <Table
-          scroll={{ y: 55 * 5 }}
           dataSource={user.map((item) => ({ ...item, key: item.id }))}
           columns={[
             {
@@ -104,10 +105,14 @@ function User() {
               title: "delete",
               dataIndex: "id",
               key: "id",
-              render: (id: number) => {
+              render: (id: number, nimadur) => {
                 return (
                   <div className=" flex">
-                    <div onClick={() => {}}>
+                    <div
+                      onClick={() => {
+                        setEditUser(nimadur);
+                      }}
+                    >
                       <Button>
                         <EditOutlined />
                       </Button>
@@ -121,6 +126,7 @@ function User() {
             },
           ]}
         />
+        <EditUser editUser={editUser} setEditUser={setEditUser} Users={Users} />
       </div>
     </>
   );

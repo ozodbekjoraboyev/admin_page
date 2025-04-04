@@ -1,29 +1,47 @@
-import { message, Table } from "antd";
+import { Button, message, Table } from "antd";
 import DeletOrders from "./DeleteOrders";
 import AddOrders from "./AddOrders";
-import { OrdersType } from "../../Type";
+import { OrdersType, ProductsType } from "../../Type";
 import { useEffect, useState } from "react";
 import Loading from "../../Loading";
 import api from "../../api/api";
+import { EditOutlined } from "@ant-design/icons";
+import axios from "axios";
+// import EditOrders from "./EditOrders";
 
 function Orders() {
-  const [orders, setorders] = useState<OrdersType[]>([]);
-
-  const fetchorders = () => {
+  const [orders, setOrders] = useState<OrdersType[]>([]);
+const [ordersProduct, setOrdersProduct] = useState<ProductsType[]>()
+  const fetchOrders = () => {
     api
-      .get("/api/orders?limit=10&page=1&order=ASC")
+      .get("/api/products?limit=10&page=1&order=ASC")
       .then((res) => {
-        setorders(res.data.items);
-        message.success("orders Page 😊");
+        setOrders(res.data.items);
+        message.success("Orders sahifasi yuklandi ");
       })
       .catch((e) => {
-        console.error("Xatolik yuz berdi😒", e);
-        message.error("Xatolik");
+        console.error("Xatolik yuz berdi", e);
+        message.error("Buyurtmalarni olishda xatolik");
       });
   };
 
+  // product get
+
   useEffect(() => {
-    fetchorders();
+    axios
+      .get(`/api/products?limit=10&page=1&order=ASC`)
+      .then((res) => {
+        console.log(res.data.items);
+        setOrdersProduct(res.data)
+      })
+      .catch((e) => {
+        message.error("Xatolik" + e);
+      });
+  }, []);
+  // product get
+
+  useEffect(() => {
+    fetchOrders();
   }, []);
 
   if (!orders.length) {
@@ -34,57 +52,60 @@ function Orders() {
     );
   }
 
-  function deleteBanner(id: number) {
+  function deleteOrder(id: number) {
     api
-      .delete(`/api/orders/${id}`, {})
+      .delete(`/api/orders/${id}`)
       .then(() => {
-        setorders((prev) => prev.filter((item) => item.id !== id));
-        message.success("O'chirish amalga oshirildi 😊");
+        setOrders((prev) => prev.filter((item) => item.id !== id));
+        message.success("Buyurtma o‘chirildi 😊");
       })
       .catch((e) => {
-        message.error("O'chirish amalga oshirilmadi 😒" + e);
+        message.error("O‘chirishda xatolik 😒" + e);
       });
   }
 
   return (
     <div className="pl-36">
       <div className="flex-1">
-        <AddOrders ozgarish={fetchorders} />
+        <AddOrders ozgarish={fetchOrders} />
       </div>
       <Table
         dataSource={orders.map((item) => ({ ...item, key: item.id }))}
         columns={[
-          { title: "Id", dataIndex: "id", key: "id" },
-          { title: "Title", dataIndex: "title", key: "title" },
+          { title: "ID", dataIndex: "id", key: "id" },
+          { title: "Status", dataIndex: "status", key: "status" },
           {
-            title: "status",
-            dataIndex: "status",
-            key: "status",
+            title: "Mahsulot IDlar",
+            dataIndex: "items",
+            key: "items",
+            render: (items) =>
+              items.map((item: any) => item.productId).join(", "),
           },
+          { title: "Mijoz ID", dataIndex: "customerId", key: "customerId" },
+          { title: "Yaratilgan", dataIndex: "createdAt", key: "createdAt" },
           {
-            title: "totalPrice",
-            dataIndex: "totalPrice",
-            key: "totalPrice",
-          },
-          {
-            title: "customerId",
-            dataIndex: "customerId",
-            key: "customerId",
-          },
-          { title: "Created At", dataIndex: "createdAt", key: "createdAt" },
-
-          {
-            title: "Delete",
+            title: "Amallar",
             dataIndex: "id",
-            key: "id",
-            render: (id: number) => (
-              <div onClick={() => deleteBanner(id)}>
-                <DeletOrders />
+            key: "actions",
+            render: (id: number, record) => (
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => {
+                    // setEditOrders(record);
+                    console.log("Tahrirlash uchun:", record);
+                  }}
+                >
+                  <EditOutlined />
+                </Button>
+                <div onClick={() => deleteOrder(id)}>
+                  <DeletOrders />
+                </div>
               </div>
             ),
           },
         ]}
       />
+      {/* <EditOrders editOrders={editOrders} setEditOrders={setEditOrders} /> */}
     </div>
   );
 }
