@@ -6,11 +6,13 @@ import AddCatigories from "./AddCatigories";
 import { EditOutlined } from "@ant-design/icons";
 import DeleteCatigories from "./DeleteCatigories";
 import { CatigoriesType } from "../../Type";
+import EditCatigories from "./EditCatigories";
 
 function Catigories() {
   const [user, setUsers] = useState<CatigoriesType[]>([]);
 
   const [isOpenDraver, setOpenDraver] = useState(false);
+  const [editCatigories, setEditCatigories] = useState<CatigoriesType>();
 
   const Users = () => {
     api
@@ -81,10 +83,14 @@ function Catigories() {
               title: "delete",
               dataIndex: "id",
               key: "id",
-              render: (id: number) => {
+              render: (id: number, nmadur) => {
                 return (
                   <div className=" flex">
-                    <div onClick={() => {}}>
+                    <div onClick={() => {
+                      setEditCatigories(nmadur)
+                      console.log(nmadur);
+                      
+                    }}>
                       <Button>
                         <EditOutlined />
                       </Button>
@@ -97,6 +103,11 @@ function Catigories() {
               },
             },
           ]}
+        />
+        <EditCatigories
+          editCatigories={editCatigories}
+          setEditCatigories={setEditCatigories}
+          Users={Users}
         />
       </div>
     </>

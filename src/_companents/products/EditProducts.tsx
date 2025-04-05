@@ -1,36 +1,37 @@
 import { Button, Drawer, Form, Input, message, Select } from "antd";
-import { useEffect, useState } from "react";
-import { CatigoriesType } from "../../Type";
+import { useState } from "react";
 import api from "../../api/api";
+import { CatigoriesType, ProductsType } from "../../Type";
 
-function EditProducts({ editProduct, setEditProduct }: any) {
+function EditProducts({
+  editProduct,
+  setEditProduct,
+  catigories,
+  fetchProducts,
+}: {
+  editProduct?: ProductsType;
+  setEditProduct: any;
+  catigories: CatigoriesType[];
+  fetchProducts: () => void;
+}) {
   const [loading, setloading] = useState(false);
 
   return (
-    <>
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-2xl p-2">Users</h1>
-        <Button type="primary" onClick={() => setEditProduct(true)}>
-          + Add user
-        </Button>
-      </div>
-      <Drawer
-        title="Edit"
-        width={500}
-        onClose={() => setEditProduct(false)}
-        open={editProduct}
-        styles={{
-          body: { paddingBottom: 80 },
-        }}
-      >
+    <Drawer
+      title="Mahsulotni tahrirlash"
+      width={500}
+      onClose={() => setEditProduct(null)}
+      open={editProduct ? true : false}
+      styles={{ body: { paddingBottom: 80 } }}
+    >
+      {editProduct && (
         <Form
           layout="vertical"
+          initialValues={editProduct}
           onFinish={(values) => {
-            console.log("Yangi mahsulot:", values);
             setloading(true);
-
             api
-              .post(`/api/products`, {
+              .patch(`/api/products/${editProduct.id}`, {
                 name: values.name,
                 stock: Number(values.stock),
                 description: values.description,
@@ -39,15 +40,14 @@ function EditProducts({ editProduct, setEditProduct }: any) {
                 categoryId: Number(values.categoryId),
               })
               .then(() => {
-                setEditProduct(false);
-
-
-                message.success("Qo'shish amalga oshirildi 😊");
+                setEditProduct(null);
+                fetchProducts();
+                message.success("Tahrirlash muvaffaqiyatli yakunlandi 😊");
               })
               .catch((err) => {
                 console.error("Xatolik yuz berdi😒", err.message);
                 message.error(
-                  "Qo'shish amalga oshirilmadi 😒 " +
+                  "Tahrirlash amalga oshmadi 😒 " +
                     (err.response?.data?.message || err.message)
                 );
               })
@@ -77,9 +77,9 @@ function EditProducts({ editProduct, setEditProduct }: any) {
           >
             <Input placeholder="Mahsulot rasmi URL manzilini kiriting" />
           </Form.Item>
-          {/* <Form.Item
+          <Form.Item
             name="categoryId"
-            label="Category Nomi"
+            label="Kategoriya"
             rules={[
               { required: true, message: "Iltimos, kategoriyani tanlang!" },
             ]}
@@ -87,23 +87,24 @@ function EditProducts({ editProduct, setEditProduct }: any) {
             <Select
               showSearch
               optionFilterProp="label"
-              options={categories.map((category) => ({
+              options={catigories.map((category) => ({
                 label: category.name,
                 value: category.id,
               }))}
               placeholder="Kategoriya tanlang"
             />
-          </Form.Item> */}
+          </Form.Item>
+
           <Form.Item>
             <div className="flex gap-5 justify-end">
               <Button loading={loading} htmlType="submit" type="primary">
-                {loading ? "Jo‘natilmoqda..." : "+ Qo‘shish"}
+                {loading ? "Saqlanmoqda..." : "Saqlash"}
               </Button>
             </div>
           </Form.Item>
         </Form>
-      </Drawer>
-    </>
+      )}
+    </Drawer>
   );
 }
 

@@ -17,7 +17,7 @@ function EditUser({
   return (
     <>
       <Drawer
-        title="Edit"
+        title="Edit User "
         onClose={() => setEditUser(undefined)}
         open={editUser ? true : false}
         styles={{

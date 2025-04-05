@@ -33,7 +33,7 @@ function AddCategories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
 
       message.success("Kategoriya muvaffaqiyatli qo‘shildi 😊");
       setOpenDraver(false);
-      ozgarish(); // Kategoriyalar ro‘yxatini yangilash uchun
+      ozgarish();
     } catch (err: any) {
       console.error("Xatolik yuz berdi:", err.message);
       message.error(

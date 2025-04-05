@@ -1,8 +1,8 @@
-import { Button, message, Table } from "antd";
+import { Button, Image, message, Table } from "antd";
 import { useEffect, useState } from "react";
 import { CatigoriesType, ProductsType } from "../../Type";
 import Loading from "../../Loading";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import DeleteProducts from "./DeleteProducts";
 import AddProducts from "./AddProducts";
 import api from "../../api/api";
@@ -63,6 +63,7 @@ function Products() {
         <AddProducts
           isOpenDraver={isOpenDraver}
           setOpenDraver={setOpenDraver}
+          fetchProducts={fetchProducts}
         />
       </div>
       <Table
@@ -132,9 +133,32 @@ function Products() {
             dataIndex: "imageUrl",
             key: "imageUrl",
             render: (imageUrl) => (
-              <img className="w-10 rounded" src={imageUrl} alt="" />
+              <Image.PreviewGroup
+                preview={{
+                  onChange: (current, prev) =>
+                    console.log(
+                      `current index: ${current}, prev index: ${prev}`
+                    ),
+                }}
+              >
+                <Image
+                  className="rounded-lg shadow-lg cursor-pointer"
+                  width={50} // O‘lchamni moslashtirishingiz mumkin
+                  src={imageUrl}
+                  alt="Product Image"
+                  style={{
+                    borderRadius: "8px", // Border radius
+                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)", // Box shadow
+                    transition: "transform 0.3s ease-in-out", // Smooth zoom-in effect
+                  }}
+                  preview={{
+                    mask: <EyeInvisibleOutlined />, // Mask text
+                  }}
+                />
+              </Image.PreviewGroup>
             ),
           },
+
           {
             title: "Actions",
             dataIndex: "id",
@@ -158,7 +182,12 @@ function Products() {
           },
         ]}
       />
-      <EditProducts editProduct={editProduct} setEditProduct={setEditProduct} />
+      <EditProducts
+        editProduct={editProduct}
+        setEditProduct={setEditProduct}
+        catigories={catigories}
+        fetchProducts={fetchProducts}
+      />
     </div>
   );
 }

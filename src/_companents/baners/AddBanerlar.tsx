@@ -10,14 +10,14 @@ function AddBanerlar({ ozgarish }: any) {
   return (
     <div className="container m-auto">
       <div className="flex items-center justify-between">
-        <h1 className="font-bold text-2xl p-2">Users</h1>
+        <h1 className="font-bold text-2xl p-2">Banners</h1>
         <Button type="primary" onClick={() => setOpenDraver(true)}>
-          + Add user
+          + Add Banners
         </Button>
       </div>
 
       <Drawer
-        title="New User"
+        title="New Banners"
         width={500}
         onClose={() => setOpenDraver(false)}
         open={isOpenModal}

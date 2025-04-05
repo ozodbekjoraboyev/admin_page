@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { Button, Drawer, Form, Input, message, Select } from "antd";
 import api from "../../api/api";
 import { CatigoriesType } from "../../Type";
+import TextArea from "antd/es/input/TextArea";
 
-function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
+function AddProducts({ isOpenDraver, setOpenDraver, fetchProducts }: any) {
   const [loading, setloading] = useState(false);
   const [categories, setCategories] = useState<CatigoriesType[]>([]);
 
@@ -26,9 +27,9 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
   return (
     <>
       <div className="flex items-center justify-between">
-        <h1 className="font-bold text-2xl p-2">Users</h1>
+        <h1 className="font-bold text-2xl p-2">Products</h1>
         <Button type="primary" onClick={() => setOpenDraver(true)}>
-          + Add user
+          + Add Products
         </Button>
       </div>
       <Drawer
@@ -58,7 +59,7 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
               .then(() => {
                 setOpenDraver(false);
 
-                ozgarish?.();
+                fetchProducts();
 
                 message.success("Qo'shish amalga oshirildi 😊");
               })
@@ -77,10 +78,18 @@ function AddProducts({ ozgarish, isOpenDraver, setOpenDraver }: any) {
           </Form.Item>
           <Form.Item
             name="description"
-            label="Description"
-            rules={[{ required: true }]}
+            label="Tavsif"
+            rules={[{ required: true, message: "Tavsif majburiy" }]}
           >
-            <Input />
+            <TextArea
+              placeholder="Mahsulot haqida tavsif yozing"
+              autoSize={{ minRows: 3, maxRows: 6 }}
+              style={{
+                resize: "none",
+                borderRadius: "8px",
+                padding: "8px 12px",
+              }}
+            />
           </Form.Item>
           <Form.Item name="price" label="Price" rules={[{ required: true }]}>
             <Input type="number" />

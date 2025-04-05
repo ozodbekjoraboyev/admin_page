@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
-import { Button, message, Table } from "antd";
+import { Button, Image, message, Table } from "antd";
 import { UserType } from "../../Type";
 import Loading from "../../Loading";
 import AddUser from "./AddUser";
 import DeleteUserId from "./DeleteUserId";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import api from "../../api/api";
 import EditUser from "./EditUser";
 
@@ -90,16 +90,34 @@ function User() {
             },
 
             {
-              title: "images",
+              title: "Image",
               dataIndex: "image",
-              key: "image",
-              render: (image) => {
-                return (
-                  <>
-                    <img className=" w-10 rounded" src={image} alt="" />
-                  </>
-                );
-              },
+              key: "image ",
+              render: (image) => (
+                <Image.PreviewGroup
+                  preview={{
+                    onChange: (current, prev) =>
+                      console.log(
+                        `current index: ${current}, prev index: ${prev}`
+                      ),
+                  }}
+                >
+                  <Image
+                    className="rounded-lg shadow-lg cursor-pointer"
+                    width={50} // O‘lchamni moslashtirishingiz mumkin
+                    src={image}
+                    alt="Product Image"
+                    style={{
+                      borderRadius: "8px", // Border radius
+                      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)", // Box shadow
+                      transition: "transform 0.3s ease-in-out", // Smooth zoom-in effect
+                    }}
+                    preview={{
+                      mask: <EyeInvisibleOutlined />, // Mask text
+                    }}
+                  />
+                </Image.PreviewGroup>
+              ),
             },
             {
               title: "delete",
@@ -107,7 +125,7 @@ function User() {
               key: "id",
               render: (id: number, nimadur) => {
                 return (
-                  <div className=" flex">
+                  <div className=" flex items-center gap-3">
                     <div
                       onClick={() => {
                         setEditUser(nimadur);
