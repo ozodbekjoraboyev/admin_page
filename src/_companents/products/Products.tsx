@@ -21,7 +21,7 @@ function Products() {
         setProducts(res.data.items);
       })
       .catch((e) => {
-        console.error("Xatolik yuz berdi😒", e);
+        console.error("Xatolik yuz berdi", e);
         message.error("Xatolik");
       });
   };

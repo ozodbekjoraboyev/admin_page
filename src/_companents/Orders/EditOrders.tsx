@@ -1,77 +1,99 @@
-import { Button, Drawer, Form, Input, message, Radio } from "antd";
+import { Button, Drawer, Form, InputNumber, message, Select } from "antd";
+import { useForm } from "antd/es/form/Form";
+import { useEffect, useState } from "react";
 import api from "../../api/api";
-import { OrdersType } from "../../Type";
-import { useState } from "react";
+import { ProductsType, UserType } from "../../Type";
 
-function EditOrders({
-  editOrders,
-  seteditOrders,
-}: {
-  editOrders: OrdersType;
-  seteditOrders: any;
-}) {
-  const [loading, setloading] = useState(false);
+function OrdersPost({ open, setOpen, orderFuntion }: any) {
+  const [form] = useForm();
+  const [usersState, setusersState] = useState<UserType[]>([]);
+  const [productsState, setproductsState] = useState<ProductsType[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    api.get("/api/users").then((res) => {
+      setusersState(res.data.items);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get("/api/products").then((res) => {
+      setproductsState(res.data.items);
+    });
+  }, []);
 
   return (
     <div>
-      <Drawer>
+      <Drawer open={open} onClose={() => setOpen(false)}>
         <Form
           layout="vertical"
-          initialValues={editOrders}
+          form={form}
           onFinish={(values) => {
-            console.log("Yangi foydalanuvchi:", values);
-            setloading(true);
-
+            console.log("order values", values);
+            const ordersData = {
+              customerId: values.customerId,
+              status: values.status,
+              items: [
+                {
+                  productId: values.productId,
+                  quantity: values.quantity,
+                },
+              ],
+            };
+            setLoading(true);
             api
-              .patch(`/api/orders`, {
-                title: values.title,
-                isActive: values.isActive,
-                imageUrl: values.imageUrl,
+              .post("/api/orders",ordersData)
+              .then((_) => {
+                orderFuntion();
+                message.success("Qoshildi");
               })
-              .then((res) => {
-                console.log("Serverdan javob:", res.data);
-                seteditOrders(false);
-                message.success("Qo'shish amalga oshirildi 😊");
+              .catch((e) => {
+                console.log(e);
+                message.error("Xatolik");
               })
-              .catch((err) => {
-                console.error("Xatolik yuz berdi😒", err.message);
-                message.error("Qo'shish amalga oshirilmadi  😒  " + err);
-              })
-              .finally(() => setloading(false));
+              .finally(() => {
+                setLoading(false);
+                form.resetFields()
+                setOpen(false)
+              });
           }}
         >
-          <Form.Item name="title" label="title" rules={[{ required: true }]}>
-            <Input placeholder="Foydalanuvchi ismi" />
-          </Form.Item>
           <Form.Item
-            name="imageUrl"
-            label="imageUrl"
-            rules={[{ required: true }]}
+            name="customerId"
+            label="Mijoz"
+            rules={[{ required: true, message: "Mahsulot tanlang" }]}
           >
-            <Input placeholder="Emailni kiriting" />
-          </Form.Item>
-
-          <Form.Item
-            name="isActive"
-            label="isActive"
-            rules={[{ required: true }]}
-          >
-            <Radio.Group
-              options={[
-                { label: "Ha", value: true },
-                { label: "Yo‘q", value: false },
-              ]}
-              optionType="button"
-              buttonStyle="solid"
+            <Select
+              placeholder="Mijoz"
+              options={usersState.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
             />
           </Form.Item>
-
+          <Form.Item
+            label="Mahsulot"
+            name="productId"
+            rules={[{ required: true }]}
+          >
+            <Select
+              options={productsState.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+            />
+          </Form.Item>
+          <Form.Item
+            label="quantity"
+            name="quantity"
+            rules={[{ required: true }]}
+          >
+            <InputNumber />
+          </Form.Item>
           <Form.Item>
-            <div className="flex gap-5 justify-end">
-              <Button loading={loading} htmlType="submit" type="primary">
-                {loading ? "Jo‘natilmoqda..." : "+ Qo‘shish"}
-              </Button>
-            </div>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              qoshish
+            </Button>
           </Form.Item>
         </Form>
       </Drawer>
@@ -79,4 +101,4 @@ function EditOrders({
   );
 }
 
-export default EditOrders;
+export default OrdersPost;

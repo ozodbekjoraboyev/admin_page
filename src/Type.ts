@@ -33,6 +33,17 @@ export type OrdersType = {
   ];
 };
 
+export type UserOrdetsType = {
+  categoryId: number;
+  createdAt: string;
+  description: string;
+  id: number;
+  imageUrl: string;
+  name: string;
+  price: number;
+  stock: number;
+};
+
 export type ProductsType = {
   id: number;
   name: string;
@@ -68,4 +79,22 @@ export type DashboardType = {
     name: string;
     totalSold: string;
   }[];
+};
+
+
+
+
+
+
+export type Order = {
+  id: number;
+  customerId: number;
+  totalPrice: number;
+  status: "pending" | "delivered" | "cancelled";
+  createdAt: string;
+  items: OrdersType[];
+};
+
+export type OrdersResponse = {
+  items: Order[];
 };
