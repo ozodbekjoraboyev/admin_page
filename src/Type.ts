@@ -81,11 +81,6 @@ export type DashboardType = {
   }[];
 };
 
-
-
-
-
-
 export type Order = {
   id: number;
   customerId: number;

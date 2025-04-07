@@ -56,15 +56,12 @@ function OrdersPage() {
     orders();
   }, []);
 
-  //users api
   useEffect(() => {
     api.get("/api/users").then((res) => {
       setUserState(res.data.items);
       console.log(res.data);
     });
   }, []);
-
-  //product api
 
   useEffect(() => {
     api.get("/api/products").then((res) => {
@@ -88,7 +85,7 @@ function OrdersPage() {
             <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
           </div>
           <Button type="primary" onClick={() => setOpenDrawer(true)}>
-            New Order
+            +Add Order
           </Button>
         </div>
         <Table
@@ -183,11 +180,7 @@ function OrdersPage() {
         setOpen={setOpenDrawer}
         orderFuntion={orders}
       />
-      <EditOrders
-        open={selectedOrder}
-        setOpen={setSelectedOrder}
-        orderFuntion={orders}
-      />
+      <EditOrders open={selectedOrder} setOpen={setSelectedOrder} />
     </div>
   );
 }

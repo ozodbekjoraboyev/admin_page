@@ -12,7 +12,7 @@ function Catigories() {
   const [user, setUsers] = useState<CatigoriesType[]>([]);
 
   const [isOpenDraver, setOpenDraver] = useState(false);
-  const [editCatigories, setEditCatigories] = useState<CatigoriesType[] | null>(null);
+  const [editCatigories, setEditCatigories] = useState<CatigoriesType>();
 
   const Users = () => {
     api
@@ -86,11 +86,12 @@ function Catigories() {
               render: (id: number, nmadur) => {
                 return (
                   <div className=" flex">
-                    <div onClick={() => {
-                      setEditCatigories(nmadur)
-                      console.log(nmadur);
-                      
-                    }}>
+                    <div
+                      onClick={() => {
+                        setEditCatigories(nmadur);
+                        console.log(nmadur);
+                      }}
+                    >
                       <Button>
                         <EditOutlined />
                       </Button>
