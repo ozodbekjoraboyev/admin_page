@@ -5,14 +5,14 @@ import Loading from "../../Loading";
 import AddCatigories from "./AddCatigories";
 import { EditOutlined } from "@ant-design/icons";
 import DeleteCatigories from "./DeleteCatigories";
-import { CatigoriesType } from "../../Type";
 import EditCatigories from "./EditCatigories";
+import { CatigoriesType } from "../../Type";
 
 function Catigories() {
   const [user, setUsers] = useState<CatigoriesType[]>([]);
 
   const [isOpenDraver, setOpenDraver] = useState(false);
-  const [editCatigories, setEditCatigories] = useState<CatigoriesType>();
+  const [editCatigories, setEditCatigories] = useState<CatigoriesType[] | null>(null);
 
   const Users = () => {
     api
@@ -43,10 +43,10 @@ function Catigories() {
       .then((res) => {
         console.log(res.data);
         setUsers((i) => i.filter((item) => item.id !== id));
-        message.success("O'chirish amalga oshirildi 😊");
+        message.success("O'chirish amalga oshirildi ");
       })
       .catch((e) => {
-        message.error("O'chirish amalga oshirilmadi 😒" + e);
+        message.error("O'chirish amalga oshirilmadi " + e);
       });
   }
 
