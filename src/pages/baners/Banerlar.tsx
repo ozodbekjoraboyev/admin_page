@@ -1,20 +1,19 @@
 import { useEffect, useState } from "react";
 import { Button, Image, message, Switch, Table } from "antd";
-import { BanersType } from "../../Type";
 import Loading from "../../Loading";
 import AddBanerlar from "./AddBanerlar";
 import DeleteBanerlar from "./DeleteBanerlar";
-import api from "../../api/api";
 import { EditOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import EditBunner from "./EditBunner";
+import { BanersType } from "../../types/Type";
+import BannersApi from "../../api/banners/Banners";
 
 function Banners() {
   const [banners, setBanners] = useState<BanersType[]>([]);
-  const [editBanners, seteditBanners] = useState<BanersType | null>(null);
+  const [editBanners, seteditBanners] = useState<BanersType>();
 
   const fetchBanners = () => {
-    api
-      .get("/api/banners?limit=10&page=1&order=ASC")
+    BannersApi.getAll()
       .then((res) => {
         setBanners(res.data.items);
         message.success("Banners Page 😊");
@@ -38,8 +37,7 @@ function Banners() {
   }
 
   function deleteBanner(id: number) {
-    api
-      .delete(`/api/banners/${id}`, {})
+    BannersApi.deleteOne(id)
       .then(() => {
         setBanners((prev) => prev.filter((item) => item.id !== id));
         message.success("O'chirish amalga oshirildi 😊");
@@ -50,8 +48,7 @@ function Banners() {
   }
 
   const toggleBanner = (id: number, isActive: boolean) => {
-    api
-      .patch(`/api/banners/${id}`, { isActive: !isActive })
+    BannersApi.patchOne(id, isActive)
       .then(() => {
         setBanners((prev) =>
           prev.map((banner) =>
@@ -77,16 +74,6 @@ function Banners() {
         columns={[
           { title: "Id", dataIndex: "id", key: "id" },
           { title: "Title", dataIndex: "title", key: "title" },
-          // {
-          //   title: "Image",
-          //   dataIndex: "imageUrl",
-          //   key: "imageUrl",
-          //   render: (imageUrl) => (
-          //     <img className="w-10 rounded" src={imageUrl} alt="" />
-          //   ),
-          // },
-
-
           {
             title: "Image",
             dataIndex: "imageUrl",
@@ -102,16 +89,16 @@ function Banners() {
               >
                 <Image
                   className="rounded-lg shadow-lg cursor-pointer"
-                  width={50} // O‘lchamni moslashtirishingiz mumkin
+                  width={50}
                   src={imageUrl}
                   alt="Product Image"
                   style={{
-                    borderRadius: "8px", // Border radius
-                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)", // Box shadow
-                    transition: "transform 0.3s ease-in-out", // Smooth zoom-in effect
+                    borderRadius: "8px", 
+                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)", 
+                    transition: "transform 0.3s ease-in-out", 
                   }}
                   preview={{
-                    mask: <EyeInvisibleOutlined />, // Mask text
+                    mask: <EyeInvisibleOutlined />, 
                   }}
                 />
               </Image.PreviewGroup>

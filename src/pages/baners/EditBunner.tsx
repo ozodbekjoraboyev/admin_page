@@ -1,15 +1,15 @@
 import { Button, Drawer, Form, Input, message, Radio } from "antd";
 import { useState } from "react";
-import api from "../../api/api";
-import { BanersType } from "../../Type";
+import { BanersType } from "../../types/Type";
+import BannersApi from "../../api/banners/Banners";
 
 function EditBunner({
   editBanners,
   seteditBanners,
   fetchBanners,
 }: {
-  editBanners: BanersType | null;
-  seteditBanners: (value: BanersType | null) => void;
+  editBanners?: BanersType;
+  seteditBanners: any;
   fetchBanners: () => void;
 }) {
   const [loading, setloading] = useState(false);
@@ -24,18 +24,12 @@ function EditBunner({
     >
       {editBanners && (
         <Form
-          key={editBanners.id}
           initialValues={editBanners}
           layout="vertical"
           onFinish={(values) => {
             setloading(true);
 
-            api
-              .patch(`/api/banners/${editBanners.id}`, {
-                title: values.title,
-                isActive: values.isActive,
-                imageUrl: values.imageUrl,
-              })
+            BannersApi.create(values)
               .then(() => {
                 seteditBanners(null);
                 fetchBanners();
@@ -52,11 +46,19 @@ function EditBunner({
             <Input placeholder="Banner nomi" />
           </Form.Item>
 
-          <Form.Item name="imageUrl" label="Rasm URL" rules={[{ required: true }]}>
+          <Form.Item
+            name="imageUrl"
+            label="Rasm URL"
+            rules={[{ required: true }]}
+          >
             <Input placeholder="https://..." />
           </Form.Item>
 
-          <Form.Item name="isActive" label="Faollik" rules={[{ required: true }]}>
+          <Form.Item
+            name="isActive"
+            label="Faollik"
+            rules={[{ required: true }]}
+          >
             <Radio.Group
               options={[
                 { label: "Faol", value: true },

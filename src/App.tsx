@@ -1,10 +1,9 @@
-import "./App.css";
+import "./css//App.css";
 import Navbar from "./companents/Navbar";
 import LoginPage from "./companents/Login";
-import useMyStor from "./useMyStore";
+import useMyStor from "./stor/useMyStore";
 
 function App() {
-  // Zustand store'ni hook sifatida ishlatish kerak
   const { user }:any = useMyStor();
   
   return (

@@ -1,13 +1,13 @@
 import { Button, Card, Form, Input, message } from "antd";  
 import { useState, useEffect } from "react";  
 import api from "../api/api";  
-import useMyStor from "../useMyStore";  
+import useMyStor from "../stor/useMyStore";
 
 function LoginPage() {  
   const [loading, setLoading] = useState(false);  
 
   useEffect(() => {  
-    // Create floating elements  
+   
     const container = document.querySelector('.animation-container');  
     const colors = ['#ff4d4f', '#40a9ff', '#a0d911', '#faad14', '#2f54eb'];  
 
@@ -15,7 +15,6 @@ function LoginPage() {
       const element = document.createElement('div');  
       element.className = 'floating-element';  
 
-      // Random properties  
       const size = Math.random() * 60 + 30;  
       const color = colors[Math.floor(Math.random() * colors.length)];  
       const duration = Math.random() * 15 + 10;  
@@ -36,7 +35,6 @@ function LoginPage() {
     }  
 
     return () => {  
-      // Clean up  
       const elements = document.querySelectorAll('.floating-element');  
       elements.forEach(el => el.remove());  
     };  

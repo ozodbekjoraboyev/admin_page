@@ -1,50 +1,40 @@
 import { Button, Drawer, Form, Input, message, Radio } from "antd";
 import { useState } from "react";
-import api from "../../api/api";
-import { UserType } from "../../Type";
+import BannersApi from "../../api/banners/Banners";
 
-function EditUser({
-  editUser,
-  setEditUser,
-  Users
-}: {
-  editUser?: UserType;
-  setEditUser: any;
-  Users: ()=>void
-}) {
+function AddBanerlar({ ozgarish }: any) {
   const [loading, setloading] = useState(false);
+  const [isOpenModal, setOpenDraver] = useState(false);
 
   return (
-    <>
+    <div className="container m-auto">
+      <div className="flex items-center justify-between">
+        <h1 className="font-bold text-2xl p-2">Banners</h1>
+        <Button type="primary" onClick={() => setOpenDraver(true)}>
+          + Add Banners
+        </Button>
+      </div>
+
       <Drawer
-        title="Edit User "
-        onClose={() => setEditUser(undefined)}
-        open={editUser ? true : false}
+        title="New Banners"
+        width={500}
+        onClose={() => setOpenDraver(false)}
+        open={isOpenModal}
         styles={{
           body: { paddingBottom: 80 },
         }}
       >
         <Form
           layout="vertical"
-          initialValues={editUser}
           onFinish={(values) => {
             console.log("Yangi foydalanuvchi:", values);
             setloading(true);
 
-            api
-              .patch(`/api/users/${editUser?.id}`, {
-                name: values.name,
-                email: values.email,
-                password: values.password,
-                image: values.image,
-                role: values.role,
-              })
+            BannersApi.create(values)
               .then((res) => {
                 console.log("Serverdan javob:", res.data);
-                setEditUser(undefined);
-                Users()
-
-
+                setOpenDraver(false);
+                ozgarish?.();
                 message.success("Qo'shish amalga oshirildi 😊");
               })
               .catch((err) => {
@@ -54,36 +44,32 @@ function EditUser({
               .finally(() => setloading(false));
           }}
         >
-          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
+          <Form.Item name="title" label="title" rules={[{ required: true }]}>
             <Input placeholder="Foydalanuvchi ismi" />
           </Form.Item>
-          <Form.Item name="email" label="Email" rules={[{ required: true }]}>
+          <Form.Item
+            name="imageUrl"
+            label="imageUrl"
+            rules={[{ required: true }]}
+          >
             <Input placeholder="Emailni kiriting" />
           </Form.Item>
+
           <Form.Item
-            name="password"
-            label="pasvord"
+            name="isActive"
+            label="isActive"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Foydalanuvchi ismi" />
-          </Form.Item>
-          <Form.Item
-            name="image"
-            label="Image URL"
-            rules={[{ required: true }]}
-          >
-            <Input placeholder="Rasm URL manzilini kiriting" />
-          </Form.Item>
-          <Form.Item name="role" label="Role" rules={[{ required: true }]}>
             <Radio.Group
               options={[
-                { label: "Customer", value: "customer" },
-                { label: "Admin", value: "admin" },
+                { label: "Ha", value: true },
+                { label: "Yo‘q", value: false },
               ]}
               optionType="button"
               buttonStyle="solid"
             />
           </Form.Item>
+
           <Form.Item>
             <div className="flex gap-5 justify-end">
               <Button loading={loading} htmlType="submit" type="primary">
@@ -93,8 +79,8 @@ function EditUser({
           </Form.Item>
         </Form>
       </Drawer>
-    </>
+    </div>
   );
 }
 
-export default EditUser;
+export default AddBanerlar;

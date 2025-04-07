@@ -1,0 +1,33 @@
+.site-form-in-drawer-wrapper {
+  position: absolute;
+  inset-inline-end: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 10px 16px;
+  text-align: right;
+  background: #fff;
+  border-top: 1px solid #e9e9e9;
+}
+
+
+
+
+.icon {
+  width: 50px;
+  height: 50px;
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}

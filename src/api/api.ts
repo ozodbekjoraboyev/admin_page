@@ -6,7 +6,7 @@ const api = axios.create({
 
 api.interceptors.response.use(null, (e) => {
   if (e.status === 401) {
-    import("../useMyStore").then((res) => {
+    import("../stor/useMyStore").then((res) => {
       const useAurStore = res.default;
       const state = useAurStore.getState();
       state.logout()

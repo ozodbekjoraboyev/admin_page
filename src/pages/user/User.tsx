@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { Button, Image, message, Table } from "antd";
-import { UserType } from "../../Type";
 import Loading from "../../Loading";
 import AddUser from "./AddUser";
 import DeleteUserId from "./DeleteUserId";
 import { EditOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
-import api from "../../api/api";
 import EditUser from "./EditUser";
+import { UserType } from "../../types/Type";
+import UsersAll from "../../api/users/Users";
 
 function User() {
   const [user, setUsers] = useState<UserType[]>([]);
@@ -15,8 +15,7 @@ function User() {
   const [editUser, setEditUser] = useState<UserType>();
 
   const Users = () => {
-    api
-      .get("/api/users?limit=10&page=1&order=ASC")
+    UsersAll.usersAll()
       .then((res) => {
         setUsers(res.data.items);
       })
@@ -38,8 +37,7 @@ function User() {
   }
 
   function DeleteUser(id: number) {
-    api
-      .delete(`/api/users/${id}`)
+    UsersAll.deleteOne(id)
       .then((res) => {
         console.log(res.data);
         setUsers((i) => i.filter((item) => item.id !== id));

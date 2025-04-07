@@ -1,10 +1,9 @@
 import { Button, Drawer, Form, Input, message, Radio } from "antd";
 import { useState } from "react";
-import api from "../../api/api";
+import UsersAll from "../../api/users/Users";
 
 function AddUser({ ozgarish, isOpenDraver, setOpenDraver }: any) {
   const [loading, setloading] = useState(false);
-
 
   return (
     <div className="container m-auto">
@@ -30,23 +29,11 @@ function AddUser({ ozgarish, isOpenDraver, setOpenDraver }: any) {
             console.log("Yangi foydalanuvchi:", values);
             setloading(true);
 
-          api
-              .post(
-                `/api/users`,
-                {
-                  name: values.name,
-                  email: values.email,
-                  password: values.password,
-                  image: values.image,
-                  role: values.role,
-                },
-            
-              )
+            UsersAll.postUser(values)
               .then((res) => {
                 console.log("Serverdan javob:", res.data);
                 setOpenDraver(false);
                 ozgarish?.();
-
 
                 message.success("Qo'shish amalga oshirildi 😊");
               })

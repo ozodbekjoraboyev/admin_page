@@ -1,11 +1,12 @@
 import { Route, Routes } from "react-router";
 import Saitbar from "./Saitbar";
-import User from "../_companents/user/User";
-import Orders from "../_companents/Orders/Orders";
-import Catigories from "../_companents/catigories/Catigories";
-import Products from "../_companents/products/Products";
-import Banners from "../_companents/baners/Banerlar";
-import Dashboard from "../_companents/Dashboard";
+import User from "../pages/user/User";
+import Banners from "../pages/baners/Banerlar";
+import OrdersPage from "../pages/Orders/Orders";
+import Products from "../pages/products/Products";
+import Catigories from "../pages/catigories/Catigories";
+import Dashboard from "../pages/Dashboard";
+
 function Navbar() {
   return (
     <div className=" container m-auto   ">
@@ -17,10 +18,10 @@ function Navbar() {
             src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
             alt=""
           />
-       <div>
-       <p>Ozoedbk</p>
-       <p>123</p>
-       </div>
+          <div>
+            <p>Ozoedbk</p>
+            <p>123</p>
+          </div>
         </div>
       </div>
       <Saitbar />
@@ -28,7 +29,7 @@ function Navbar() {
       <Routes>
         <Route path="/user" element={<User />} />
         <Route path="/banerlar" element={<Banners />} />
-        <Route path="/orders" element={<Orders />} />
+        <Route path="/orders" element={<OrdersPage />} />
         <Route path="/products" element={<Products />} />
         <Route path="/catigories" element={<Catigories />} />
         <Route path="/dashboard" element={<Dashboard />} />
