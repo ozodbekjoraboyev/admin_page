@@ -1,9 +1,9 @@
 import { Button, Drawer, Form, InputNumber, Select } from "antd";
-import { useState } from "react";
+// import { useState } from "react";
 import { Order } from "../../types/Type";
 
 function EditOrders({ open, setOpen }: { open?: Order; setOpen: any }) {
-  const [loading, setLoading] = useState();
+  // const [loading, setLoading] = useState();
   return (
     <div>
       <Drawer
@@ -24,7 +24,7 @@ function EditOrders({ open, setOpen }: { open?: Order; setOpen: any }) {
           </Form.Item>
           <Form.Item>
             <Button htmlType="submit" type="primary">
-              {loading ? "Saqlanmoqda" : "Saqlash"}
+              {/* {loading ? "Saqlanmoqda" : "Saqlash"} */}
             </Button>
           </Form.Item>
         </Form>
