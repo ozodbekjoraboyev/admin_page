@@ -9,7 +9,7 @@ function EditCatigories({
   setEditCatigories,
   Users,
 }: {
-  editCatigories: CatigoriesType;
+  editCatigories?: CatigoriesType;
   setEditCatigories: any;
   Users: () => void;
 }) {
