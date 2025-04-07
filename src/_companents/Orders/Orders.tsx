@@ -1,9 +1,16 @@
 import { Button, Table } from "antd";
 import { useState, useEffect } from "react";
-import { DeleteOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import api from "../../api/api";
-import { Order, OrdersResponse, OrdersType, ProductsType, UserType } from "../../Type";
+import {
+  Order,
+  OrdersResponse,
+  OrdersType,
+  ProductsType,
+  UserType,
+} from "../../Type";
 import EditOrders from "./EditOrders";
+import Addorders from "./AddOrders";
 
 function OrderStatusBadge({ status }: { status: Order["status"] }) {
   const statusStyles = {
@@ -22,17 +29,15 @@ function OrderStatusBadge({ status }: { status: Order["status"] }) {
 }
 
 function OrdersPage() {
-  const [orderState, setOrderState] = useState<Order[]>([]);
   const [userState, setUserState] = useState<UserType[]>([]);
+  const [orderState, setOrderState] = useState<Order[]>([]);
   const [productState, setProductState] = useState<ProductsType[]>([]);
   const [openOrderDrawer, setOpenDrawer] = useState(false);
-  const [loading,setLoading]=useState<boolean>(true)
-
-  
-  
+  const [loading, setLoading] = useState<boolean>(true);
+  const [selectedOrder, setSelectedOrder] = useState<Order>();
 
   const orders = () => {
-    setLoading(true)
+    setLoading(true);
     api
       .get<OrdersResponse>("/api/orders?order=ASC")
       .then((res) => {
@@ -41,17 +46,17 @@ function OrdersPage() {
       })
       .catch((error) => {
         console.error("Error fetching orders:", error);
-      }).finally(()=>{
-        setLoading(false)
       })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   useEffect(() => {
     orders();
   }, []);
 
-
-  //users api 
+  //users api
   useEffect(() => {
     api.get("/api/users").then((res) => {
       setUserState(res.data.items);
@@ -60,17 +65,20 @@ function OrdersPage() {
   }, []);
 
   //product api
-  
+
   useEffect(() => {
     api.get("/api/products").then((res) => {
       setProductState(res.data.items);
-      console.log('products',res.data.items);
+      console.log("products", res.data.items);
     });
   }, []);
-  
-  function onDelete(id:number) {
-   api.delete(`/api/orders/${id}`).then(_=>setOrderState(prev=>prev.filter(item=>item.id!==id)))
-   
+
+  function onDelete(id: number) {
+    api
+      .delete(`/api/orders/${id}`)
+      .then((_) =>
+        setOrderState((prev) => prev.filter((item) => item.id !== id))
+      );
   }
   return (
     <div className="w-full h-full bg-gray-50">
@@ -79,17 +87,18 @@ function OrdersPage() {
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold text-gray-900">Orders</h1>
           </div>
-          <Button type="primary" onClick={()=>setOpenDrawer(true)}>
+          <Button type="primary" onClick={() => setOpenDrawer(true)}>
             New Order
           </Button>
         </div>
-        <Table style={{
-          overflow:'auto',
-          height:560,
-          width:'100% '
-        }}
-        loading={loading}
-        size="large"
+        <Table
+          style={{
+            overflow: "auto",
+            height: 560,
+            width: "100% ",
+          }}
+          loading={loading}
+          size="large"
           columns={[
             {
               key: "id",
@@ -119,44 +128,67 @@ function OrdersPage() {
               key: "id",
               dataIndex: "totalPrice",
               title: "Jami",
-              render:(totalPrice)=>{
-                return <p>{totalPrice.toLocaleString('ru')} so'm</p>
-              }
+              render: (totalPrice) => {
+                return <p>{totalPrice.toLocaleString("ru")} so'm</p>;
+              },
             },
             {
               key: "id",
               dataIndex: "items",
               title: "Mahsulot",
-              render:(items:any)=>{
-                return <div>
-                  {items?.map((item:OrdersType)=>{
-                    const nomi= productState.find(productItem=>{
-                      return productItem.id=== item.id
-                    })
-                    return nomi?.name
-                  })}
-                </div>
-              }
+              render: (items: any) => {
+                return (
+                  <div>
+                    {items?.map((item: OrdersType) => {
+                      const nomi = productState.find((productItem) => {
+                        return productItem.id === item.id;
+                      });
+                      return nomi?.name;
+                    })}
+                  </div>
+                );
+              },
             },
             {
               key: "id",
               dataIndex: "id",
               title: "Actions",
-              render:(id:number)=>{
-                return <div>
-                  <Button danger onClick={()=>onDelete(id)}><DeleteOutlined/></Button>
-                </div>
-              }
+              render: (id: number, nmadur: any) => {
+                return (
+                  <div>
+                    <Button
+                      onClick={() => {
+                        setSelectedOrder(nmadur);
+                        console.log(nmadur);
+                      }}
+                    >
+                      <EditOutlined />
+                    </Button>
+
+                    <Button danger onClick={() => onDelete(id)}>
+                      <DeleteOutlined />
+                    </Button>
+                  </div>
+                );
+              },
             },
           ]}
           dataSource={orderState}
           rowKey="id"
-          pagination={{pageSize:10}}
+          pagination={{ pageSize: 10 }}
         />
       </div>
-      <EditOrders open={openOrderDrawer} setOpen={setOpenDrawer} orderFuntion={orders}/>
+      <Addorders
+        open={openOrderDrawer}
+        setOpen={setOpenDrawer}
+        orderFuntion={orders}
+      />
+      <EditOrders
+        open={selectedOrder}
+        setOpen={setSelectedOrder}
+        orderFuntion={orders}
+      />
     </div>
-
   );
 }
 

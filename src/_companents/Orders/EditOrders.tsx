@@ -1,10 +1,18 @@
-import { Button, Drawer, Form, InputNumber, message, Select } from "antd";
-import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
+import { Order, ProductsType, UserType } from "../../Type";
+import { useForm } from "antd/es/form/Form";
 import api from "../../api/api";
-import { ProductsType, UserType } from "../../Type";
+import { Button, Drawer, Form, InputNumber, message, Select } from "antd";
 
-function OrdersPost({ open, setOpen, orderFuntion }: any) {
+function EditOrders({
+  open,
+  setOpen,
+  orderFuntion,
+}: {
+  open?: Order;
+  setOpen: any;
+  orderFuntion: () => void;
+}) {
   const [form] = useForm();
   const [usersState, setusersState] = useState<UserType[]>([]);
   const [productsState, setproductsState] = useState<ProductsType[]>([]);
@@ -24,9 +32,10 @@ function OrdersPost({ open, setOpen, orderFuntion }: any) {
 
   return (
     <div>
-      <Drawer open={open} onClose={() => setOpen(false)}>
+      <Drawer open={!!open} onClose={() => setOpen(false)}>
         <Form
           layout="vertical"
+          initialValues={open}
           form={form}
           onFinish={(values) => {
             console.log("order values", values);
@@ -42,7 +51,7 @@ function OrdersPost({ open, setOpen, orderFuntion }: any) {
             };
             setLoading(true);
             api
-              .post("/api/orders",ordersData)
+              .post("/api/orders", ordersData)
               .then((_) => {
                 orderFuntion();
                 message.success("Qoshildi");
@@ -53,8 +62,8 @@ function OrdersPost({ open, setOpen, orderFuntion }: any) {
               })
               .finally(() => {
                 setLoading(false);
-                form.resetFields()
-                setOpen(false)
+                form.resetFields();
+                setOpen(false);
               });
           }}
         >
@@ -92,7 +101,7 @@ function OrdersPost({ open, setOpen, orderFuntion }: any) {
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading}>
-              qoshish
+              Saqlash
             </Button>
           </Form.Item>
         </Form>
@@ -101,4 +110,4 @@ function OrdersPost({ open, setOpen, orderFuntion }: any) {
   );
 }
 
-export default OrdersPost;
+export default EditOrders;

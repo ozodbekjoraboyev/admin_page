@@ -12,7 +12,7 @@ function Products() {
   const [products, setProducts] = useState<ProductsType[]>([]);
   const [isOpenDraver, setOpenDraver] = useState(false);
   const [catigories, setCatigories] = useState<CatigoriesType[]>([]);
-  const [editProduct, setEditProduct] = useState<ProductsType | null>(null);
+  const [editProduct, setEditProduct] = useState<ProductsType>();
 
   const fetchProducts = () => {
     api
@@ -143,16 +143,16 @@ function Products() {
               >
                 <Image
                   className="rounded-lg shadow-lg cursor-pointer"
-                  width={50} // O‘lchamni moslashtirishingiz mumkin
+                  width={50}
                   src={imageUrl}
                   alt="Product Image"
                   style={{
-                    borderRadius: "8px", // Border radius
-                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)", // Box shadow
-                    transition: "transform 0.3s ease-in-out", // Smooth zoom-in effect
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                    transition: "transform 0.3s ease-in-out",
                   }}
                   preview={{
-                    mask: <EyeInvisibleOutlined />, // Mask text
+                    mask: <EyeInvisibleOutlined />,
                   }}
                 />
               </Image.PreviewGroup>

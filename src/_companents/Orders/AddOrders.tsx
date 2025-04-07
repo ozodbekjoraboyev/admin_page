@@ -1,86 +1,99 @@
-import { Button, Drawer, Form, Input, message, Radio } from "antd";
-import { useState } from "react";
+import { Button, Drawer, Form, InputNumber, message, Select } from "antd";
+import { useForm } from "antd/es/form/Form";
+import { useEffect, useState } from "react";
 import api from "../../api/api";
+import { ProductsType, UserType } from "../../Type";
 
-function AddOrders({ ozgarish }: any) {
-  const [loading, setloading] = useState(false);
-  const [isOpenModal, setOpenDraver] = useState(false);
+function Addorders({ open, setOpen, orderFuntion }: any) {
+  const [form] = useForm();
+  const [usersState, setusersState] = useState<UserType[]>([]);
+  const [productsState, setproductsState] = useState<ProductsType[]>([]);
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() => {
+    api.get("/api/users").then((res) => {
+      setusersState(res.data.items);
+    });
+  }, []);
+
+  useEffect(() => {
+    api.get("/api/products").then((res) => {
+      setproductsState(res.data.items);
+    });
+  }, []);
 
   return (
-    <div className="container m-auto">
-      <div className="flex items-center justify-between">
-        <h1 className="font-bold text-2xl p-2">Users</h1>
-        <Button type="primary" onClick={() => setOpenDraver(true)}>
-          + Add user
-        </Button>
-      </div>
-
-      <Drawer
-        title="New User"
-        width={500}
-        onClose={() => setOpenDraver(false)}
-        open={isOpenModal}
-        styles={{
-          body: { paddingBottom: 80 },
-        }}
-      >
+    <div>
+      <Drawer open={open} onClose={() => setOpen(false)}>
         <Form
           layout="vertical"
+          form={form}
           onFinish={(values) => {
-            console.log("Yangi foydalanuvchi:", values);
-            setloading(true);
-
+            console.log("order values", values);
+            const ordersData = {
+              customerId: values.customerId,
+              status: values.status,
+              items: [
+                {
+                  productId: values.productId,
+                  quantity: values.quantity,
+                },
+              ],
+            };
+            setLoading(true);
             api
-              .post(`/api/orderss`, {
-                customerId: values.customerId,
-                items: values.items,
+              .post("/api/orders",ordersData)
+              .then((_) => {
+                orderFuntion();
+                message.success("Qoshildi");
               })
-              .then((res) => {
-                console.log("Serverdan javob:", res.data);
-                setOpenDraver(false);
-                ozgarish?.();
-                message.success("Qo'shish amalga oshirildi 😊");
+              .catch((e) => {
+                console.log(e);
+                message.error("Xatolik");
               })
-              .catch((err) => {
-                console.error("Xatolik yuz berdi😒", err.message);
-                message.error("Qo'shish amalga oshirilmadi  😒  " + err);
-              })
-              .finally(() => setloading(false));
+              .finally(() => {
+                setLoading(false);
+                form.resetFields()
+                setOpen(false)
+              });
           }}
         >
-          <Form.Item name="title" label="title" rules={[{ required: true }]}>
-            <Input placeholder="Foydalanuvchi ismi" />
-          </Form.Item>
           <Form.Item
-            name="imageUrl"
-            label="imageUrl"
-            rules={[{ required: true }]}
+            name="customerId"
+            label="Mijoz"
+            rules={[{ required: true, message: "Mahsulot tanlang" }]}
           >
-            <Input placeholder="Emailni kiriting" />
-          </Form.Item>
-
-          <Form.Item
-            name="isActive"
-            label="isActive"
-            rules={[{ required: true }]}
-          >
-            <Radio.Group
-              options={[
-                { label: "Ha", value: true },
-                { label: "Yo‘q", value: false },
-              ]}
-              optionType="button"
-              buttonStyle="solid"
+            <Select
+              placeholder="Mijoz"
+              options={usersState.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
             />
           </Form.Item>
-
+          <Form.Item
+            label="Mahsulot"
+            name="productId"
+            rules={[{ required: true }]}
+          >
+            <Select
+              options={productsState.map((item) => ({
+                label: item.name,
+                value: item.id,
+              }))}
+            />
+          </Form.Item>
+          <Form.Item
+            label="quantity"
+            name="quantity"
+            rules={[{ required: true }]}
+          >
+            <InputNumber />
+          </Form.Item>
           <Form.Item>
-            <div className="flex gap-5 justify-end">
-              <Button loading={loading} htmlType="submit" type="primary">
-                {loading ? "Jo‘natilmoqda..." : "+ Qo‘shish"}
-              </Button>
-            </div>
+            <Button type="primary" htmlType="submit" loading={loading}>
+              qoshish
+            </Button>
           </Form.Item>
         </Form>
       </Drawer>
@@ -88,17 +101,4 @@ function AddOrders({ ozgarish }: any) {
   );
 }
 
-export default AddOrders;
-
-
-
-
-// {
-//   "customerId": 0,
-//   "items": [
-//     {
-//       "productId": 0,
-//       "quantity": 0
-//     }
-//   ]
-// }
+export default Addorders;
