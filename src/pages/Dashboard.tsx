@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Card, Row, Col, Typography, List, Spin } from "antd";
 import api from "../api/api";
-import { DashboardType } from "../Type";
+import { DashboardType } from "../types/Type";
 
 const {  Text } = Typography;
 

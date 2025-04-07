@@ -8,7 +8,7 @@ import {
   OrdersType,
   ProductsType,
   UserType,
-} from "../../Type";
+} from "../../types/Type";
 import EditOrders from "./EditOrders";
 import Addorders from "./AddOrders";
 

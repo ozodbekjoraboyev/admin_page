@@ -2,7 +2,7 @@ import { Button, Drawer, Form, InputNumber, message, Select } from "antd";
 import { useForm } from "antd/es/form/Form";
 import { useEffect, useState } from "react";
 import api from "../../api/api";
-import { ProductsType, UserType } from "../../Type";
+import { ProductsType, UserType } from "../../types/Type";
 
 function Addorders({ open, setOpen, orderFuntion }: any) {
   const [form] = useForm();

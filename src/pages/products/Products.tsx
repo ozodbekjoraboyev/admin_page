@@ -1,12 +1,12 @@
 import { Button, Image, message, Table } from "antd";
 import { useEffect, useState } from "react";
-import { CatigoriesType, ProductsType } from "../../Type";
 import Loading from "../../Loading";
 import { EditOutlined, EyeInvisibleOutlined } from "@ant-design/icons";
 import DeleteProducts from "./DeleteProducts";
 import AddProducts from "./AddProducts";
-import api from "../../api/api";
 import EditProducts from "./EditProducts";
+import { CatigoriesType, ProductsType } from "../../types/Type";
+import ProductsAll from "../../api/products/Products";
 
 function Products() {
   const [products, setProducts] = useState<ProductsType[]>([]);
@@ -15,8 +15,7 @@ function Products() {
   const [editProduct, setEditProduct] = useState<ProductsType>();
 
   const fetchProducts = () => {
-    api
-      .get("/api/products?limit=10&page=1&order=ASC")
+    ProductsAll.productsget()
       .then((res) => {
         setProducts(res.data.items);
       })
@@ -31,7 +30,7 @@ function Products() {
   }, []);
 
   useEffect(() => {
-    api.get(`/api/categories`).then((res) => {
+    ProductsAll.productsCatigories().then((res) => {
       console.log(res.data.items);
       setCatigories(res.data.items);
     });
@@ -46,8 +45,7 @@ function Products() {
   }
 
   function deleteProduct(id: number) {
-    api
-      .delete(`/api/products/${id}`)
+    ProductsAll.productDelete(id)
       .then(() => {
         setProducts((prev) => prev.filter((item) => item.id !== id));
         message.success("O'chirish amalga oshirildi 😊");

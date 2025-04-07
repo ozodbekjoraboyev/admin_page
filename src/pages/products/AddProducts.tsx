@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button, Drawer, Form, Input, message, Select } from "antd";
 import api from "../../api/api";
-import { CatigoriesType } from "../../Type";
 import TextArea from "antd/es/input/TextArea";
+import { CatigoriesType } from "../../types/Type";
 
 function AddProducts({ isOpenDraver, setOpenDraver, fetchProducts }: any) {
   const [loading, setloading] = useState(false);
@@ -12,7 +12,7 @@ function AddProducts({ isOpenDraver, setOpenDraver, fetchProducts }: any) {
     api
       .get("/api/categories")
       .then((res) => {
-        setCategories(res.data.items); // Backenddan kelgan ma'lumotni olish
+        setCategories(res.data.items);
       })
       .catch((err) => {
         console.error("Kategoriyalarni yuklashda xatolik:", err);

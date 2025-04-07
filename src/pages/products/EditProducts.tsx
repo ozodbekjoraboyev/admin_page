@@ -1,7 +1,7 @@
 import { Button, Drawer, Form, Input, message, Select } from "antd";
 import { useState } from "react";
 import api from "../../api/api";
-import { CatigoriesType, ProductsType } from "../../Type";
+import { CatigoriesType, ProductsType } from "../../types/Type";
 
 function EditProducts({
   editProduct,

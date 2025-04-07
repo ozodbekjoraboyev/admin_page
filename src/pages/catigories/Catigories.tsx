@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import api from "../../api/api";
 import { Button, message, Table } from "antd";
 import Loading from "../../Loading";
 import AddCatigories from "./AddCatigories";
 import { EditOutlined } from "@ant-design/icons";
 import DeleteCatigories from "./DeleteCatigories";
 import EditCatigories from "./EditCatigories";
-import { CatigoriesType } from "../../Type";
+import { CatigoriesType } from "../../types/Type";
+import CatigoriesAPI from "../../api/catigories/Catigories";
 
 function Catigories() {
   const [user, setUsers] = useState<CatigoriesType[]>([]);
@@ -15,8 +15,7 @@ function Catigories() {
   const [editCatigories, setEditCatigories] = useState<CatigoriesType>();
 
   const Users = () => {
-    api
-      .get("/api/categories?limit=10&page=1&order=ASC")
+    CatigoriesAPI.categoriesAll()
       .then((res) => {
         setUsers(res.data.items);
       })
@@ -38,8 +37,7 @@ function Catigories() {
   }
 
   function DeleteUser(id: number) {
-    api
-      .delete(`/api/categories/${id}`, {})
+    CatigoriesAPI.categoriesDelete(id)
       .then((res) => {
         console.log(res.data);
         setUsers((i) => i.filter((item) => item.id !== id));

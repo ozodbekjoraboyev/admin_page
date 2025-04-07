@@ -1,7 +1,7 @@
 import { Button, Drawer, Form, Input, message } from "antd";
 import api from "../../api/api";
 import { useEffect, useState } from "react";
-import { CatigoriesType } from "../../Type";
+import { CatigoriesType } from "../../types/Type";
 
 function AddCategories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
   const [_, setCategories] = useState<CatigoriesType[]>([]);

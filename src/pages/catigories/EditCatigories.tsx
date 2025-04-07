@@ -1,8 +1,8 @@
 import { Button, Drawer, Form, Input, message } from "antd";
-import { CatigoriesType } from "../../Type";
 import { useState } from "react";
 import api from "../../api/api";
 import TextArea from "antd/es/input/TextArea";
+import { CatigoriesType } from "../../types/Type";
 
 function EditCatigories({
   editCatigories,

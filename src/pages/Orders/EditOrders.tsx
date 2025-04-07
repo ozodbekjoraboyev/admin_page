@@ -1,6 +1,6 @@
 import { Button, Drawer, Form, InputNumber, Select } from "antd";
-import { Order } from "../../Type";
 import { useState } from "react";
+import { Order } from "../../types/Type";
 
 function EditOrders({ open, setOpen }: { open?: Order; setOpen: any }) {
   const [loading, setLoading] = useState();
