@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Image, message, Table } from "antd";
+import { Button, Image, message, Spin, Table } from "antd";
 import Loading from "../../Loading";
 import AddUser from "./AddUser";
 import DeleteUserId from "./DeleteUserId";
@@ -13,8 +13,10 @@ function User() {
 
   const [isOpenDraver, setOpenDraver] = useState(false);
   const [editUser, setEditUser] = useState<UserType>();
+  const [loading, setLoading] = useState(true);
 
   const Users = () => {
+    setLoading(true);
     UsersAll.usersAll()
       .then((res) => {
         setUsers(res.data.items);
@@ -22,13 +24,16 @@ function User() {
       .catch((e) => {
         console.error("Xatolik yuz berdi😒", e);
         message.error("Xatolik");
+      })
+      .finally(() => {
+        setLoading(false);
       });
   };
   useEffect(() => {
     Users();
   }, []);
 
-  if (!user.length) {
+  if (loading) {
     return (
       <div className="m-auto  flex justify-center items-center top-0 bottom-0 left-0 right-0">
         <Loading />
@@ -59,7 +64,8 @@ function User() {
           />
         </div>
         <Table
-          dataSource={user.map((item) => ({ ...item, key: item.id }))}
+          loading={loading}
+          dataSource={user}
           columns={[
             {
               title: "Id",

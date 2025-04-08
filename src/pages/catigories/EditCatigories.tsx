@@ -18,6 +18,7 @@ function EditCatigories({
   return (
     <div>
       <Drawer
+        loading={loading}
         title="lkjhgfrtyui"
         width={500}
         onClose={() => setEditCatigories(undefined)}
@@ -34,7 +35,7 @@ function EditCatigories({
             setloading(true);
 
             api
-              .patch(`/api/categories${editCatigories?.id}`, {
+              .patch(`/api/categories/${editCatigories?.id}`, {
                 name: values.name,
                 description: values.description,
               })
@@ -43,11 +44,11 @@ function EditCatigories({
                 setEditCatigories(undefined);
                 Users();
 
-                message.success("Qo'shish amalga oshirildi 😊");
+                message.success("Qo'shish amalga oshirildi ");
               })
               .catch((err) => {
-                console.error("Xatolik yuz berdi😒", err.message);
-                message.error("Qo'shish amalga oshirilmadi  😒  " + err);
+                console.error("Xatolik yuz berdi", err.message);
+                message.error("Qo'shish amalga oshirilmad " + err);
               })
               .finally(() => setloading(false));
           }}
@@ -70,7 +71,7 @@ function EditCatigories({
           <Form.Item>
             <div className="flex gap-5 justify-end">
               <Button loading={loading} htmlType="submit" type="primary">
-              <Button type="primary">{loading ? "Saqlanmoqda..." : "Saqlash"}</Button>
+                {loading ? "Saqlanmoqda..." : "Saqlash"}
               </Button>
             </div>
           </Form.Item>

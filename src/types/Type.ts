@@ -93,3 +93,15 @@ export type Order = {
 export type OrdersResponse = {
   items: Order[];
 };
+
+
+
+
+
+export interface OrderStatistics {
+  id: number;
+  count: number;
+  status: 'pending' | 'completed' | 'cancelled';
+  date: string;
+
+}

@@ -7,7 +7,6 @@ function AddCategories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
   const [_, setCategories] = useState<CatigoriesType[]>([]);
   const [loading, setLoading] = useState(false);
 
-  // Kategoriyalarni yuklash
   useEffect(() => {
     api
       .get("/api/categories")
@@ -20,7 +19,6 @@ function AddCategories({ ozgarish, isOpenDraver, setOpenDraver }: any) {
       });
   }, []);
 
-  // Formni yuborish
   const handleSubmit = async (values: any) => {
     console.log("Yangi kategoriya:", values);
     setLoading(true);

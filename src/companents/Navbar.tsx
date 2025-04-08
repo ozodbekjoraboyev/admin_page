@@ -6,6 +6,7 @@ import OrdersPage from "../pages/Orders/Orders";
 import Products from "../pages/products/Products";
 import Catigories from "../pages/catigories/Catigories";
 import Dashboard from "../pages/Dashboard";
+import StatisticaOrders from "../pages/order/StatisticaOrders";
 
 function Navbar() {
   return (
@@ -33,6 +34,7 @@ function Navbar() {
         <Route path="/products" element={<Products />} />
         <Route path="/catigories" element={<Catigories />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/Ssatus" element={<StatisticaOrders />} />
       </Routes>
     </div>
   );

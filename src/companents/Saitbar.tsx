@@ -24,17 +24,21 @@ function Saitbar() {
           {
             to: "/catigories",
             label: "Catigories",
-          },  {
+          },
+          {
             to: "/dashboard",
             label: "Dashboard",
           },
-       
+          {
+            to: "/ssatus",
+            label: "Ssatus",
+          },
         ].map((item) => {
           return (
             <NavLink
               key={item.to}
               to={item.to}
-              className={({isActive}) =>
+              className={({ isActive }) =>
                 `p-2 rounded text-center ${
                   isActive
                     ? "bg-white text-black font-bold"
