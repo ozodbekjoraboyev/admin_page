@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Image, message, Spin, Table } from "antd";
+import { Button, Image, message, Table } from "antd";
 import Loading from "../../Loading";
 import AddUser from "./AddUser";
 import DeleteUserId from "./DeleteUserId";
