@@ -78,8 +78,8 @@ function OrdersPage() {
       );
   }
   return (
-    <div className="w-full h-full bg-gray-50">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 py-8">
+    <div className=" pl-36  bg-gray-50">
+      <div className="  ">
         <div className="flex justify-between items-center mb-8">
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold text-gray-900">Orders</h1>

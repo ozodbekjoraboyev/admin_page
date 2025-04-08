@@ -16,7 +16,7 @@ function Dashboard() {
   }, []);
 
   return (
-    <div className="container mx-auto pl-36">
+    <div className="container mx-auto pl-36 pt-20">
       {dashboard ? (
         <Row gutter={[16, 16]}>
           {/* Umumiy statistikalar */}

@@ -65,7 +65,7 @@ function Banners() {
   };
 
   return (
-    <div className="pl-36">
+    <div className="pl-36 pt-16">
       <div className="flex-1">
         <AddBanerlar ozgarish={fetchBanners} />
       </div>
@@ -93,12 +93,12 @@ function Banners() {
                   src={imageUrl}
                   alt="Product Image"
                   style={{
-                    borderRadius: "8px", 
-                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)", 
-                    transition: "transform 0.3s ease-in-out", 
+                    borderRadius: "8px",
+                    boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                    transition: "transform 0.3s ease-in-out",
                   }}
                   preview={{
-                    mask: <EyeInvisibleOutlined />, 
+                    mask: <EyeInvisibleOutlined />,
                   }}
                 />
               </Image.PreviewGroup>

@@ -55,7 +55,7 @@ function User() {
 
   return (
     <>
-      <div className="pl-36 ">
+      <div className="pl-36 pt-16 ">
         <div className=" flex-1 ">
           <AddUser
             ozgarish={Users}
@@ -108,16 +108,16 @@ function User() {
                 >
                   <Image
                     className="rounded-lg shadow-lg cursor-pointer"
-                    width={50} // O‘lchamni moslashtirishingiz mumkin
+                    width={50}
                     src={image}
                     alt="Product Image"
                     style={{
-                      borderRadius: "8px", // Border radius
-                      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)", // Box shadow
-                      transition: "transform 0.3s ease-in-out", // Smooth zoom-in effect
+                      borderRadius: "8px",
+                      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+                      transition: "transform 0.3s ease-in-out",
                     }}
                     preview={{
-                      mask: <EyeInvisibleOutlined />, // Mask text
+                      mask: <EyeInvisibleOutlined />, 
                     }}
                   />
                 </Image.PreviewGroup>
