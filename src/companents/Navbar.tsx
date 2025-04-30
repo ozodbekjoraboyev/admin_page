@@ -10,7 +10,7 @@ import StatisticaOrders from "../pages/order/StatisticaOrders";
 
 function Navbar() {
   return (
-    <div className=" container m-auto   ">
+    <div >
       <div className=" flex  fixed z-50 w-full  justify-between bg-gradient-to-r from-black p-2  to-blue-600 text-white  overflow-hidden">
         <div>Logo</div>
         <div className=" flex items-center ">

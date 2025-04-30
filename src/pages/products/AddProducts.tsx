@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { Button, Drawer, Form, Input, message, Select } from "antd";
+import { Button, Drawer, Form, Input, message, Select, Upload } from "antd";
 import api from "../../api/api";
 import TextArea from "antd/es/input/TextArea";
 import { CatigoriesType } from "../../types/Type";
+import { UploadOutlined } from "@ant-design/icons";
 
 function AddProducts({ isOpenDraver, setOpenDraver, fetchProducts }: any) {
   const [loading, setloading] = useState(false);
@@ -53,7 +54,7 @@ function AddProducts({ isOpenDraver, setOpenDraver, fetchProducts }: any) {
                 stock: Number(values.stock),
                 description: values.description,
                 price: Number(values.price),
-                imageUrl: values.imageUrl,
+                imageUrl: values.imageUrl.file.response.url,
                 categoryId: Number(values.categoryId),
               })
               .then(() => {
@@ -102,7 +103,12 @@ function AddProducts({ isOpenDraver, setOpenDraver, fetchProducts }: any) {
             label="Image URL"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Mahsulot rasmi URL manzilini kiriting" />
+            <Upload
+              name="file"
+              action={`https://nt.softly.uz/api/files/upload`}
+            >
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
           </Form.Item>
           <Form.Item
             name="categoryId"

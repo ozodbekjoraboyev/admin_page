@@ -1,12 +1,39 @@
-import { Button, Drawer, Form, Input, message, Radio } from "antd";
-import { useState } from "react";
+import {
+  Button,
+  Drawer,
+  Form,
+  Input,
+  message,
+  Radio,
+  Upload,
+  UploadProps,
+} from "antd";
+import React, { useState } from "react";
 import UsersAll from "../../api/users/Users";
+import { UploadOutlined } from "@ant-design/icons";
 
 function AddUser({ ozgarish, isOpenDraver, setOpenDraver }: any) {
   const [loading, setloading] = useState(false);
+  const props: UploadProps = {
+    name: "file",
+    action: "https://nt.softly.uz/api/files/upload",
+    headers: {
+      authorization: "authorization-text",
+    },
+    onChange(info) {
+      if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
 
   return (
-    <div className="container m-auto">
+    <div>
       <div className="flex items-center justify-between">
         <h1 className="font-bold text-2xl p-2">Users</h1>
         <Button type="primary" onClick={() => setOpenDraver(true)}>
@@ -52,18 +79,22 @@ function AddUser({ ozgarish, isOpenDraver, setOpenDraver }: any) {
           </Form.Item>
           <Form.Item
             name="password"
-            label="pasvord"
+            label="Password"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Foydalanuvchi ismi" />
+            <Input placeholder="Enter password" />
           </Form.Item>
+
           <Form.Item
-            name="image"
+            name="Image"
             label="Image URL"
             rules={[{ required: true }]}
           >
-            <Input placeholder="Rasm URL manzilini kiriting" />
+            <Upload {...props}>
+              <Button icon={<UploadOutlined />}>Upload</Button>
+            </Upload>
           </Form.Item>
+
           <Form.Item name="role" label="Role" rules={[{ required: true }]}>
             <Radio.Group
               options={[
@@ -87,4 +118,4 @@ function AddUser({ ozgarish, isOpenDraver, setOpenDraver }: any) {
   );
 }
 
-export default AddUser;
+export default React.memo(AddUser);

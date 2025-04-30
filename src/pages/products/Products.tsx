@@ -13,11 +13,16 @@ function Products() {
   const [isOpenDraver, setOpenDraver] = useState(false);
   const [catigories, setCatigories] = useState<CatigoriesType[]>([]);
   const [editProduct, setEditProduct] = useState<ProductsType>();
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const fetchProducts = (pageNumber = 1) => {
+    const limit = 10; 
 
-  const fetchProducts = () => {
-    ProductsAll.productsget()
+    ProductsAll.productsget(limit, pageNumber )
+
       .then((res) => {
         setProducts(res.data.items);
+        setTotal(res.data.total);
       })
       .catch((e) => {
         console.error("Xatolik yuz berdi", e);
@@ -27,7 +32,7 @@ function Products() {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [products]);
 
   useEffect(() => {
     ProductsAll.productsCatigories().then((res) => {
@@ -179,6 +184,15 @@ function Products() {
             ),
           },
         ]}
+        pagination={{
+          current: page,
+          pageSize: 10,
+          total: total,
+          onChange: (pageNumber) => {
+            setPage(pageNumber);
+            fetchProducts(pageNumber);
+          },
+        }}
       />
       <EditProducts
         editProduct={editProduct}

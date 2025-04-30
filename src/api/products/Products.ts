@@ -1,8 +1,8 @@
 import api from "../api";
 
 const ProductsAll = {
-  productsget: () => {
-    return api.get(`/api/products?limit=10&page=1&order=ASC`);
+  productsget: (limit = 10, page = 1) => {
+    return api.get(`/api/products?limit=${limit}&page=${page}&order=ASC`);
   },
   productsCatigories: () => {
     return api.get(`/api/categories`);

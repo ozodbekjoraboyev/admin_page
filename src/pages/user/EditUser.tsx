@@ -6,11 +6,11 @@ import { UserType } from "../../types/Type";
 function EditUser({
   editUser,
   setEditUser,
-  Users
+  Users,
 }: {
   editUser?: UserType;
   setEditUser: any;
-  Users: ()=>void
+  Users: () => void;
 }) {
   const [loading, setloading] = useState(false);
 
@@ -42,8 +42,7 @@ function EditUser({
               .then((res) => {
                 console.log("Serverdan javob:", res.data);
                 setEditUser(undefined);
-                Users()
-
+                Users();
 
                 message.success("Qo'shish amalga oshirildi 😊");
               })

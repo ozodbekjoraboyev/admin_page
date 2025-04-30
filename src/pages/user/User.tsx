@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Image, message, Table } from "antd";
+import { Button, Image, message,  Table } from "antd";
 import Loading from "../../Loading";
 import AddUser from "./AddUser";
 import DeleteUserId from "./DeleteUserId";
@@ -14,12 +14,16 @@ function User() {
   const [isOpenDraver, setOpenDraver] = useState(false);
   const [editUser, setEditUser] = useState<UserType>();
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
-  const Users = () => {
+  const Users = (pageNumber = 1) => {
     setLoading(true);
-    UsersAll.usersAll()
+    const limit = 10; 
+    UsersAll.usersAll(limit, pageNumber)
       .then((res) => {
         setUsers(res.data.items);
+        setTotal(res.data.total); 
       })
       .catch((e) => {
         console.error("Xatolik yuz berdi😒", e);
@@ -29,10 +33,11 @@ function User() {
         setLoading(false);
       });
   };
+  
   useEffect(() => {
-    Users();
-  }, []);
-
+    Users(page);
+  }, [page]);
+  
   if (loading) {
     return (
       <div className="m-auto  flex justify-center items-center top-0 bottom-0 left-0 right-0">
@@ -117,7 +122,7 @@ function User() {
                       transition: "transform 0.3s ease-in-out",
                     }}
                     preview={{
-                      mask: <EyeInvisibleOutlined />, 
+                      mask: <EyeInvisibleOutlined />,
                     }}
                   />
                 </Image.PreviewGroup>
@@ -147,8 +152,17 @@ function User() {
               },
             },
           ]}
+          pagination={{
+            current: page,
+            pageSize: 10, 
+            total: total, 
+            onChange: (pageNumber) => {
+              setPage(pageNumber);
+              Users(pageNumber); 
+            },
+          }}
         />
-        <EditUser editUser={editUser} setEditUser={setEditUser} Users={Users} />
+              <EditUser editUser={editUser} setEditUser={setEditUser} Users={Users} />
       </div>
     </>
   );
